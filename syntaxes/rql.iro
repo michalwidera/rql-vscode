@@ -41,15 +41,15 @@ contexts[] {
       : include "floatingPoints" ;
       : include "integers" ;
       : pattern {
-         regex \= (\b(select|SELECT|stream|STREAM|from|FROM|declare|DECLARE|storage|STORAGE|file|FILE|retention|RETENTION))
+         regex \= (\b(SELECT|select|STREAM|stream|FROM|from|DECLARE|declare|STORAGE|storage|FILE|file|VOLATILE|volatile|RULE|rule|ON|on|WHEN|when|DO|do|DUMP|dump|SYSTEM|system))
          styles [] = .keyword;
       }
       : pattern {
-         regex \= (\b(Integer|INTEGER|Byte|BYTE|Char|CHAR|Uint|UINT|String|STRING|Float|FLOAT|Double|DOUBLE))
+         regex \= (\b(INTEGER|Integer|BYTE|Byte|CHAR|Char|UINT|Uint|STRING|String|FLOAT|Float|DOUBLE|Double|DISPOSABLE|disposable|RETENTION|retention|SUBSTRAT|substrat|ONESHOT|oneshot|HOLD|hold|STORAGE|storage|OR|or|AND|and))
          styles [] = .type;
       }
       : pattern {
-         regex \= (\b(REF|TYPE))
+         regex \= (\b(REF|TYPE|RETENTION|RETMEMORY))
          styles [] = .desc;
       }
       : pattern {
