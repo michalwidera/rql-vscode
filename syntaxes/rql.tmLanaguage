@@ -5,10 +5,11 @@
 <dict>
   <key>fileTypes</key>
   <array> 
-    <string>mysample</string>
+    <string>rql</string>
+    <string>desc</string>
    </array>
   <key>name</key>
-  <string>mysample</string>
+  <string>rql</string>
   <key>patterns</key>
   <array> 
     <dict>
@@ -17,7 +18,7 @@
     </dict>
    </array>
   <key>scopeName</key>
-  <string>source.mysample</string>
+  <string>source.rql</string>
   <key>uuid</key>
   <string></string>
   <key>repository</key>
@@ -27,118 +28,88 @@
       <key>patterns</key>
       <array> 
         <dict>
-          <key>match</key>
-          <string>(\b[a-z][a-z0-9]*)</string>
-          <key>name</key>
-          <string>keyword.mysample</string>
-        </dict>
-        <dict>
-          <key>include</key>
-          <string>#numeric</string>
-        </dict>
-        <dict>
-          <key>begin</key>
-          <string>(\{)</string>
-          <key>beginCaptures</key>
-          <dict>
-            <key>1</key>
-            <dict>
-              <key>name</key>
-              <string>punctuation.mysample</string>
-            </dict>
-          </dict>
-          <key>patterns</key>
-          <array> 
-            <dict>
-              <key>include</key>
-              <string>#main__1</string>
-            </dict>
-           </array>
-          <key>end</key>
-          <string>(\})</string>
-          <key>endCaptures</key>
-          <dict>
-            <key>1</key>
-            <dict>
-              <key>name</key>
-              <string>punctuation.mysample</string>
-            </dict>
-          </dict>
-        </dict>
-        <dict>
-          <key>match</key>
-          <string>(;)</string>
-          <key>name</key>
-          <string>punctuation.mysample</string>
-        </dict>
-        <dict>
-          <key>begin</key>
-          <string>(\&quot;)</string>
-          <key>beginCaptures</key>
-          <dict>
-            <key>1</key>
-            <dict>
-              <key>name</key>
-              <string>punctuation.mysample</string>
-            </dict>
-          </dict>
-          <key>contentName</key>
-          <string>text.mysample</string>
-          <key>end</key>
-          <string>(\&quot;)</string>
-          <key>endCaptures</key>
-          <dict>
-            <key>1</key>
-            <dict>
-              <key>name</key>
-              <string>punctuation.mysample</string>
-            </dict>
-          </dict>
-        </dict>
-        <dict>
-          <key>begin</key>
-          <string>(\()</string>
-          <key>beginCaptures</key>
-          <dict>
-            <key>1</key>
-            <dict>
-              <key>name</key>
-              <string>punctuation.mysample</string>
-            </dict>
-          </dict>
-          <key>patterns</key>
-          <array> 
-            <dict>
-              <key>include</key>
-              <string>#main__3</string>
-            </dict>
-           </array>
-          <key>end</key>
-          <string>(\))</string>
-          <key>endCaptures</key>
-          <dict>
-            <key>1</key>
-            <dict>
-              <key>name</key>
-              <string>punctuation.mysample</string>
-            </dict>
-          </dict>
-        </dict>
-        <dict>
           <key>include</key>
           <string>#multi_line_comment</string>
         </dict>
         <dict>
-          <key>match</key>
-          <string>(//.*)</string>
-          <key>name</key>
-          <string>comment.mysample</string>
+          <key>include</key>
+          <string>#floatingPoints</string>
+        </dict>
+        <dict>
+          <key>include</key>
+          <string>#integers</string>
         </dict>
         <dict>
           <key>match</key>
-          <string>([^\s])</string>
+          <string>(\b(SELECT|select|STREAM|stream|FROM|from|DECLARE|declare|STORAGE|storage|FILE|file|VOLATILE|volatile|RULE|rule|ON|on|WHEN|when|DO|do|DUMP|dump|SYSTEM|system))</string>
           <key>name</key>
-          <string>invalid.mysample</string>
+          <string>keyword.rql</string>
+        </dict>
+        <dict>
+          <key>match</key>
+          <string>(\b(INTEGER|Integer|BYTE|Byte|CHAR|Char|UINT|Uint|STRING|String|FLOAT|Float|DOUBLE|Double|DISPOSABLE|disposable|RETENTION|retention|SUBSTRAT|substrat|ONESHOT|oneshot|HOLD|hold|STORAGE|storage|OR|or|AND|and))</string>
+          <key>name</key>
+          <string>type.rql</string>
+        </dict>
+        <dict>
+          <key>match</key>
+          <string>(\b(REF|TYPE|RETENTION|RETMEMORY))</string>
+          <key>name</key>
+          <string>desc.rql</string>
+        </dict>
+        <dict>
+          <key>match</key>
+          <string>(^# .*)|(^//.*)</string>
+          <key>name</key>
+          <string>comment.rql</string>
+        </dict>
+        <dict>
+          <key>begin</key>
+          <string>(\&apos;)</string>
+          <key>beginCaptures</key>
+          <dict>
+            <key>1</key>
+            <dict>
+              <key>name</key>
+              <string>quoted.rql</string>
+            </dict>
+          </dict>
+          <key>contentName</key>
+          <string>quoted.rql</string>
+          <key>end</key>
+          <string>(\&apos;)</string>
+          <key>endCaptures</key>
+          <dict>
+            <key>1</key>
+            <dict>
+              <key>name</key>
+              <string>quoted.rql</string>
+            </dict>
+          </dict>
+        </dict>
+       </array>
+    </dict>
+    <key>floatingPoints</key>
+    <dict>
+      <key>patterns</key>
+      <array> 
+        <dict>
+          <key>match</key>
+          <string>(\b[0-9][0-9]*)(\.)(\b[0-9][0-9]*)</string>
+          <key>name</key>
+          <string>numeric.rql</string>
+        </dict>
+       </array>
+    </dict>
+    <key>integers</key>
+    <dict>
+      <key>patterns</key>
+      <array> 
+        <dict>
+          <key>match</key>
+          <string>(\b[0-9][0-9]*)</string>
+          <key>name</key>
+          <string>numeric.rql</string>
         </dict>
        </array>
     </dict>
@@ -146,32 +117,6 @@
     <dict>
       <key>patterns</key>
       <array> 
-        <dict>
-          <key>include</key>
-          <string>#main</string>
-        </dict>
-       </array>
-    </dict>
-    <key>main__2</key>
-    <dict>
-      <key>patterns</key>
-      <array> 
-       </array>
-    </dict>
-    <key>main__3</key>
-    <dict>
-      <key>patterns</key>
-      <array> 
-        <dict>
-          <key>include</key>
-          <string>#numeric</string>
-        </dict>
-        <dict>
-          <key>match</key>
-          <string>(,)</string>
-          <key>name</key>
-          <string>punctuation.mysample</string>
-        </dict>
        </array>
     </dict>
     <key>multi_line_comment</key>
@@ -186,11 +131,11 @@
             <key>1</key>
             <dict>
               <key>name</key>
-              <string>comment.mysample</string>
+              <string>comment.rql</string>
             </dict>
           </dict>
           <key>contentName</key>
-          <string>comment.mysample</string>
+          <string>comment.rql</string>
           <key>end</key>
           <string>(\*/)</string>
           <key>endCaptures</key>
@@ -198,7 +143,7 @@
             <key>1</key>
             <dict>
               <key>name</key>
-              <string>comment.mysample</string>
+              <string>comment.rql</string>
             </dict>
           </dict>
         </dict>
@@ -208,18 +153,6 @@
     <dict>
       <key>patterns</key>
       <array> 
-       </array>
-    </dict>
-    <key>numeric</key>
-    <dict>
-      <key>patterns</key>
-      <array> 
-        <dict>
-          <key>match</key>
-          <string>(\b\d+)</string>
-          <key>name</key>
-          <string>constant.numeric.mysample</string>
-        </dict>
        </array>
     </dict>
   </dict>
