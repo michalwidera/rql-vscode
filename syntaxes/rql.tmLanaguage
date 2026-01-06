@@ -41,7 +41,7 @@
         </dict>
         <dict>
           <key>match</key>
-          <string>(\b(SELECT|select|STREAM|stream|FROM|from|DECLARE|declare|STORAGE|storage|FILE|file|VOLATILE|volatile|RULE|rule|ONESHOT|oneshot|ON|on|HOLD|hold|WHEN|when|DO|do|DUMP|dump|SYSTEM|system))</string>
+          <string>(\b(SELECT|select|STREAM|stream|FROM|from|DECLARE|declare|STORAGE|storage|FILE|file|VOLATILE|volatile|RULE|rule|ONESHOT|oneshot|ON|on|HOLD|hold|WHEN|when|DO|do|DUMP|dump|SYSTEM|system|DISPOSABLE|disposable))</string>
           <key>name</key>
           <string>keyword.rql</string>
         </dict>
