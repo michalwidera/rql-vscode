@@ -41,13 +41,13 @@
         </dict>
         <dict>
           <key>match</key>
-          <string>(\b(SELECT|select|STREAM|stream|FROM|from|DECLARE|declare|STORAGE|storage|FILE|file|VOLATILE|volatile|RULE|rule|ON|on|WHEN|when|DO|do|DUMP|dump|SYSTEM|system))</string>
+          <string>(\b(SELECT|select|STREAM|stream|FROM|from|DECLARE|declare|STORAGE|storage|FILE|file|VOLATILE|volatile|RULE|rule|ONESHOT|oneshot|ON|on|HOLD|hold|WHEN|when|DO|do|DUMP|dump|SYSTEM|system))</string>
           <key>name</key>
           <string>keyword.rql</string>
         </dict>
         <dict>
           <key>match</key>
-          <string>(\b(INTEGER|Integer|BYTE|Byte|CHAR|Char|UINT|Uint|STRING|String|FLOAT|Float|DOUBLE|Double|DISPOSABLE|disposable|RETENTION|retention|SUBSTRAT|substrat|ONESHOT|oneshot|HOLD|hold|STORAGE|storage|OR|or|AND|and))</string>
+          <string>(\b(INTEGER|Integer|BYTE|Byte|CHAR|Char|UINT|Uint|STRING|String|FLOAT|Float|DOUBLE|Double|DISPOSABLE|disposable|RETENTION|retention|SUBSTRAT|substrat|STORAGE|storage|OR|or|AND|and))</string>
           <key>name</key>
           <string>type.rql</string>
         </dict>
