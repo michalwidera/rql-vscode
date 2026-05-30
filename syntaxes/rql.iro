@@ -27,7 +27,9 @@ textmate_compatible    = true
 
 
 styles[] {
-   .comment  : style color = "light_green" textmate_scope = "comment";
+   .comment_hash  : style color = "#808080" textmate_scope = "comment.line.number-sign.rql";
+   .comment_slash : style color = "#808080" textmate_scope = "comment.line.double-slash.rql";
+   .comment_block : style color = "#808080" textmate_scope = "comment.block.rql";
    .keyword  : style color = "#FF6666"     textmate_scope = "keyword";
    .type     : style color = "#33FFFF"     textmate_scope = "type";
    .desc     : style color = "white"       textmate_scope = "desc";
@@ -53,8 +55,12 @@ contexts[] {
          styles [] = .desc;
       }
       : pattern {
-         regex \= (# .*)|(//.*)
-         styles [] = .comment;
+         regex \= (#.*)
+         styles [] = .comment_hash;
+      }
+      : pattern {
+         regex \= (//.*)
+         styles [] = .comment_slash;
       }
       : inline_push {
          regex \= (\')
@@ -71,11 +77,11 @@ contexts[] {
       description        = multiline
       : inline_push {
          regex          \= (/\*)
-         styles []       = .comment;
-         default_style   = .comment
+         styles []       = .comment_block;
+         default_style   = .comment_block
          : pop {
             regex       \= (\*/)
-            styles []    = .comment;
+            styles []    = .comment_block;
          }
       }
    }

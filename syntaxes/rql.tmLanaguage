@@ -59,9 +59,15 @@
         </dict>
         <dict>
           <key>match</key>
-          <string>(# .*)|(//.*)</string>
+          <string>(#.*)</string>
           <key>name</key>
-          <string>comment.rql</string>
+          <string>comment.line.number-sign.rql</string>
+        </dict>
+        <dict>
+          <key>match</key>
+          <string>(//.*)</string>
+          <key>name</key>
+          <string>comment.line.double-slash.rql</string>
         </dict>
         <dict>
           <key>begin</key>
@@ -131,11 +137,11 @@
             <key>1</key>
             <dict>
               <key>name</key>
-              <string>comment.rql</string>
+              <string>comment.block.rql</string>
             </dict>
           </dict>
           <key>contentName</key>
-          <string>comment.rql</string>
+          <string>comment.block.rql</string>
           <key>end</key>
           <string>(\*/)</string>
           <key>endCaptures</key>
@@ -143,7 +149,7 @@
             <key>1</key>
             <dict>
               <key>name</key>
-              <string>comment.rql</string>
+              <string>comment.block.rql</string>
             </dict>
           </dict>
         </dict>
