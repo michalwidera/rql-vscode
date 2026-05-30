@@ -55,22 +55,26 @@ code --install-extension rql-<wersja>.vsix
 
 ### Metoda 3 — budowanie ze źródeł
 
-Wymagania wstępne: **Node.js** (v16+) oraz **npm**.
+**Wariant A — przez `vsce`** (wymaga Node.js v16+ i npm; nie działa w WSL jeśli npm pochodzi z Windows):
 
 ```bash
-# 1. Sklonuj repozytorium
 git clone https://github.com/michalwidera/rql-vscode.git
 cd rql-vscode
-
-# 2. Zainstaluj narzędzie do pakowania rozszerzeń VS Code
 npm install -g @vscode/vsce
-
-# 3. Zbuduj pakiet .vsix
 vsce package
-
-# 4. Zainstaluj wygenerowany pakiet
 code --install-extension rql-*.vsix
 ```
+
+**Wariant B — przez Python 3** (działa wszędzie, bez zależności):
+
+```bash
+git clone https://github.com/michalwidera/rql-vscode.git
+cd rql-vscode
+python3 build.py
+code --install-extension rql-*.vsix
+```
+
+Skrypt `build.py` jest dołączony do repozytorium i tworzy poprawne archiwum `.vsix` bez żadnych zewnętrznych narzędzi.
 
 ### Metoda 4 — tryb deweloperski (bez pakowania)
 
