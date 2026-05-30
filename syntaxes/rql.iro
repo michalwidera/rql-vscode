@@ -41,19 +41,19 @@ contexts[] {
       : include "floatingPoints" ;
       : include "integers" ;
       : pattern {
-         regex \= (\b(SELECT|select|STREAM|stream|FROM|from|DECLARE|declare|STORAGE|storage|FILE|file|VOLATILE|volatile|RULE|rule|ONESHOT|oneshot|ON|on|HOLD|hold|WHEN|when|DO|do|DUMP|dump|SYSTEM|system|DISPOSABLE|disposable))
+         regex \= (\b(SELECT|select|STREAM|stream|FROM|from|DECLARE|declare|RETENTION|retention|FILE|file|STORAGE|storage|ROTATION|rotation|SUBSTRAT|substrat|VOLATILE|volatile|RULE|rule|DISPOSABLE|disposable|ONESHOT|oneshot|HOLD|hold|ON|on|WHEN|when|DO|do|DUMP|dump|SYSTEM|system|TO|to|AND|and|OR|or|NOT|not))
          styles [] = .keyword;
       }
       : pattern {
-         regex \= (\b(INTEGER|Integer|BYTE|Byte|CHAR|Char|UINT|Uint|STRING|String|FLOAT|Float|DOUBLE|Double|DISPOSABLE|disposable|RETENTION|retention|SUBSTRAT|substrat|STORAGE|storage|OR|or|AND|and))
+         regex \= (\b(INTEGER|Integer|BYTE|Byte|CHAR|Char|UINT|Uint|STRING|String|FLOAT|Float|DOUBLE|Double|MEMORY|memory|DEFAULT|default|DIRECT|direct|POSIX|posix|POSIXSHD|posixshd|GENERIC|generic|DEVICE|device|TEXTSOURCE|textsource))
          styles [] = .type;
       }
       : pattern {
-         regex \= (\b(REF|TYPE|RETENTION|RETMEMORY))
+         regex \= (\b(MIN|min|MAX|max|AVG|avg|SUMC|sumc|Sqrt|Ceil|Abs|Floor|Sign|Chr|Length|ToNumber|ToTimeStamp|FloatCast|IntCast|Count|Crc|Sum|IsZero|IsNonZero|isnull|to_integer|to_float|to_double|to_string))
          styles [] = .desc;
       }
       : pattern {
-         regex \= (^# .*)|(^//.*)
+         regex \= (# .*)|(//.*)
          styles [] = .comment;
       }
       : inline_push {

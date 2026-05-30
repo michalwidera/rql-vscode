@@ -1,65 +1,117 @@
-# rql README
+# RQL Code HighLight
 
-This is the README for your extension "rql". After writing up a brief description, we recommend including the following sections.
+Rozszerzenie VS Code dodające podświetlanie składni dla języka zapytań **RQL** (RetractorDB Query Language) używanego przez silnik bazy danych [RetractorDB](https://github.com/michalwidera/retractordb).
 
-## Features
+## Funkcje
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+Rozszerzenie obsługuje pliki `.rql` oraz `.desc` i podświetla:
 
-For example if there is an image subfolder under your extension project workspace:
+| Kategoria | Przykłady |
+|---|---|
+| Słowa kluczowe | `SELECT`, `DECLARE`, `RULE`, `FROM`, `STREAM`, `WHEN`, `DO`, `DUMP` |
+| Dyrektywy kompilatora | `STORAGE`, `ROTATION`, `SUBSTRAT` |
+| Operatory logiczne | `AND`, `OR`, `NOT` |
+| Typy danych | `INTEGER`, `FLOAT`, `DOUBLE`, `STRING`, `BYTE`, `CHAR`, `UINT` |
+| Profile pamięci | `MEMORY`, `DIRECT`, `POSIX`, `POSIXSHD`, `DEVICE`, `TEXTSOURCE` |
+| Agregatory | `MIN`, `MAX`, `AVG`, `SUMC` |
+| Funkcje wbudowane | `Sqrt`, `Ceil`, `Abs`, `ToNumber`, `FloatCast`, `to_integer`, `isnull`, ... |
 
-\!\[feature X\]\(images/feature-x.png\)
+Dodatkowo obsługiwane są:
 
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+- komentarze liniowe `//` i hashowe `# ` (wymagana spacja po `#`)
+- komentarze blokowe `/* ... */`
+- automatyczne zamykanie nawiasów `()`, `[]`, `{}`
+- automatyczne zamykanie cudzysłowów `'...'`
 
-## Requirements
+## Wymagania
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+- Visual Studio Code w wersji **1.81.0** lub nowszej
 
-## Extension Settings
+## Instalacja
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
+### Metoda 1 — z pliku `.vsix` (zalecana)
 
-For example:
+1. Pobierz plik `rql-<wersja>.vsix` z sekcji [Releases](../../releases) tego repozytorium.
 
-This extension contributes the following settings:
+2. Otwórz VS Code i przejdź do panelu rozszerzeń:
+   - skrót: `Ctrl+Shift+X` (Windows/Linux) lub `Cmd+Shift+X` (macOS)
 
-* `myExtension.enable`: Enable/disable this extension.
-* `myExtension.thing`: Set to `blah` to do something.
+3. Kliknij ikonę `...` (menu kontekstowe) w prawym górnym rogu panelu rozszerzeń i wybierz:
+   ```
+   Install from VSIX...
+   ```
 
-## Known Issues
+4. Wskaż pobrany plik `.vsix` i potwierdź instalację.
 
-Calling out known issues can help limit users opening duplicate issues against your extension.
+5. Przeładuj okno VS Code (`Ctrl+Shift+P` → `Developer: Reload Window`).
 
-## Release Notes
+### Metoda 2 — instalacja z linii poleceń
 
-Users appreciate release notes as you update your extension.
+Jeśli masz zainstalowany interfejs `code` w PATH:
 
-### 1.0.0
+```bash
+code --install-extension rql-<wersja>.vsix
+```
 
-Initial release of ...
+### Metoda 3 — budowanie ze źródeł
 
-### 1.0.1
+Wymagania wstępne: **Node.js** (v16+) oraz **npm**.
 
-Fixed issue #.
+```bash
+# 1. Sklonuj repozytorium
+git clone https://github.com/michalwidera/rql-vscode.git
+cd rql-vscode
 
-### 1.1.0
+# 2. Zainstaluj narzędzie do pakowania rozszerzeń VS Code
+npm install -g @vscode/vsce
 
-Added features X, Y, and Z.
+# 3. Zbuduj pakiet .vsix
+vsce package
 
----
+# 4. Zainstaluj wygenerowany pakiet
+code --install-extension rql-*.vsix
+```
 
-## Working with Markdown
+### Metoda 4 — tryb deweloperski (bez pakowania)
 
-You can author your README using Visual Studio Code. Here are some useful editor keyboard shortcuts:
+Aby edytować i testować rozszerzenie bez budowania paczki:
 
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux).
-* Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux).
-* Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets.
+1. Sklonuj repozytorium do katalogu `~/.vscode/extensions/`:
+   ```bash
+   git clone https://github.com/michalwidera/rql-vscode.git \
+       ~/.vscode/extensions/rql-vscode
+   ```
 
-## For more information
+2. Przeładuj VS Code (`Ctrl+Shift+P` → `Developer: Reload Window`).
 
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
+## Weryfikacja instalacji
 
-**Enjoy!**
+Otwórz dowolny plik z rozszerzeniem `.rql` lub `.desc`. W prawym dolnym rogu paska stanu VS Code powinno pojawić się `RQL`. Składnia powinna być kolorowana zgodnie z kategorią tokenów.
+
+Jeśli kolorowanie nie działa, upewnij się że wybrany motyw kolorystyczny obsługuje zakresy TextMate (`keyword`, `type`, `comment`, `string`, `constant`).
+
+## Aktualizacja gramatyki
+
+Gramatyka jest utrzymywana w pliku `syntaxes/rql.iro` (format [Iro](https://eeyo.io/iro/)) i synchronizowana z `RQL.g4` projektu RetractorDB. Wygenerowany plik `syntaxes/rql.tmLanaguage` jest gotowy do użycia bez dodatkowych kroków.
+
+Aby przeregenerować `tmLanguage` po zmianie `rql.iro`:
+
+1. Otwórz [https://eeyo.io/iro/](https://eeyo.io/iro/) i wklej zawartość `syntaxes/rql.iro`.
+2. W sekcji eksportu wybierz **TextMate** i skopiuj wynik do `syntaxes/rql.tmLanaguage`.
+
+## Znane problemy
+
+- Nazwa pliku gramatyki (`rql.tmLanaguage`) zawiera literówkę — zachowana dla zgodności wstecznej z `package.json`.
+
+## Historia zmian
+
+### 0.0.2
+
+- Dodano słowa kluczowe `DISPOSABLE`, `ONESHOT`, `HOLD`, `ROTATION`, `TO`, `NOT`
+- Dodano funkcję `isnull`
+- Usunięto tokeny nieistniejące w gramatyce (`RATIONAL`, `REF`, `RETMEMORY`)
+- Poprawiono regex komentarzy — nie wymagają początku linii
+
+### 0.0.1
+
+- Pierwsze wydanie z podstawowym podświetlaniem składni RQL
