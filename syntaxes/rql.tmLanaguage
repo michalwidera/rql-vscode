@@ -59,7 +59,7 @@
         </dict>
         <dict>
           <key>match</key>
-          <string>(#.*)</string>
+          <string>(#\s.*)</string>
           <key>name</key>
           <string>comment.line.number-sign.rql</string>
         </dict>
@@ -68,6 +68,12 @@
           <string>(//.*)</string>
           <key>name</key>
           <string>comment.line.double-slash.rql</string>
+        </dict>
+        <dict>
+          <key>match</key>
+          <string>([\x{0023}\x{0026}\x{0025}\x{002f}\x{003e}\x{002b}])</string>
+          <key>name</key>
+          <string>keyword.operator.rql</string>
         </dict>
         <dict>
           <key>begin</key>

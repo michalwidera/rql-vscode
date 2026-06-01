@@ -27,10 +27,11 @@ textmate_compatible    = true
 
 
 styles[] {
-   .comment_hash  : style color = "#808080" textmate_scope = "comment.line.number-sign.rql";
-   .comment_slash : style color = "#808080" textmate_scope = "comment.line.double-slash.rql";
-   .comment_block : style color = "#808080" textmate_scope = "comment.block.rql";
+   .comment_hash  : style color = "#808080" textmate_scope = "comment.line.number-sign";
+   .comment_slash : style color = "#808080" textmate_scope = "comment.line.double-slash";
+   .comment_block : style color = "#808080" textmate_scope = "comment.block";
    .keyword  : style color = "#FF6666"     textmate_scope = "keyword";
+   .operator : style color = "#FF6666"     textmate_scope = "keyword.operator";
    .type     : style color = "#33FFFF"     textmate_scope = "type";
    .desc     : style color = "white"       textmate_scope = "desc";
    .quoted   : style color = "orange"      textmate_scope = "quoted";
@@ -55,12 +56,16 @@ contexts[] {
          styles [] = .desc;
       }
       : pattern {
-         regex \= (#.*)
+         regex \= (#\s.*)
          styles [] = .comment_hash;
       }
       : pattern {
          regex \= (//.*)
          styles [] = .comment_slash;
+      }
+      : pattern {
+         regex \= ([#&%/>+])
+         styles [] = .operator;
       }
       : inline_push {
          regex \= (\')
