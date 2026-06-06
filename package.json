@@ -1,4 +1,5 @@
 {
+  "publisher": "michalwidera",
   "name": "rql",
   "displayName": "RQL Code HighLight",
   "description": "Syntax Highlight for RQL Queries",
