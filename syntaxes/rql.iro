@@ -44,7 +44,7 @@ contexts[] {
       : include "floatingPoints" ;
       : include "integers" ;
       : pattern {
-         regex \= (\b(SELECT|select|STREAM|stream|FROM|from|DECLARE|declare|RETENTION|retention|FILE|file|STORAGE|storage|ROTATION|rotation|SUBSTRAT|substrat|VOLATILE|volatile|RULE|rule|DISPOSABLE|disposable|ONESHOT|oneshot|HOLD|hold|ON|on|WHEN|when|DO|do|DUMP|dump|SYSTEM|system|TO|to|AND|and|OR|or|NOT|not))
+         regex \= (\b(SELECT|select|STREAM|stream|FROM|from|DECLARE|declare|RETENTION|retention|FILE|file|STORAGE|storage|ROTATION|rotation|SUBSTRAT|substrat|VOLATILE|volatile|RULE|rule|DISPOSABLE|disposable|ONESHOT|oneshot|HOLD|hold|NOCACHE|nocache|CACHE|cache|ON|on|WHEN|when|DO|do|DUMP|dump|SYSTEM|system|TO|to|AND|and|OR|or|NOT|not))
          styles [] = .keyword;
       }
       : pattern {
