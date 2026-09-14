@@ -41,7 +41,7 @@
         </dict>
         <dict>
           <key>match</key>
-          <string>(\b(SELECT|select|STREAM|stream|FROM|from|DECLARE|declare|RETENTION|retention|FILE|file|STORAGE|storage|ROTATION|rotation|SUBSTRAT|substrat|VOLATILE|volatile|RULE|rule|DISPOSABLE|disposable|ONESHOT|oneshot|HOLD|hold|NOCACHE|nocache|CACHE|cache|ON|on|WHEN|when|DO|do|DUMP|dump|SYSTEM|system|TO|to|AND|and|OR|or|NOT|not)\b)</string>
+          <string>(\b(SELECT|select|STREAM|stream|FROM|from|DECLARE|declare|RETENTION|retention|FILE|file|STORAGE|storage|ROTATION|rotation|SUBSTRAT|substrat|VOLATILE|volatile|PERSISTENT|persistent|RULE|rule|DISPOSABLE|disposable|ONESHOT|oneshot|HOLD|hold|NOCACHE|nocache|CACHE|cache|ON|on|WHEN|when|DO|do|DUMP|dump|SYSTEM|system|TO|to|AND|and|OR|or|NOT|not)\b)</string>
           <key>name</key>
           <string>keyword.rql</string>
         </dict>
@@ -53,13 +53,19 @@
         </dict>
         <dict>
           <key>match</key>
-          <string>(\b(MIN|min|MAX|max|AVG|avg|SUMC|sumc|Sqrt|Ceil|Abs|Floor|Sign|Chr|Length|ToNumber|ToTimeStamp|FloatCast|IntCast|Count|Crc|Sum|IsZero|IsNonZero|isnull|to_integer|to_float|to_double|to_string)\b)</string>
+          <string>(\b(MIN|min|MAX|max|AVG|avg|SUMC|sumc)\b)</string>
           <key>name</key>
           <string>desc.rql</string>
         </dict>
         <dict>
           <key>match</key>
-          <string>(#\s.*)</string>
+          <string>(\b(?i:sqrt|ceil|floor|abs|round|trunc|sin|cos|exp|tan|log2|log|isnull|null2zero|iszero|isnonzero|length|to_integer|to_float|to_double|to_string|int|float|real|str)\b(?=\s*\())</string>
+          <key>name</key>
+          <string>desc.rql</string>
+        </dict>
+        <dict>
+          <key>match</key>
+          <string>(^\s*#.*)</string>
           <key>name</key>
           <string>comment.line.number-sign.rql</string>
         </dict>
@@ -71,7 +77,7 @@
         </dict>
         <dict>
           <key>match</key>
-          <string>([\x{0023}\x{0026}\x{0025}\x{002f}\x{003e}\x{002b}])</string>
+          <string>([\x{0023}\x{0026}\x{0025}\x{002f}\x{003e}\x{002b}\x{0040}\x{005e}\x{0024}\x{003a}])</string>
           <key>name</key>
           <string>keyword.operator.rql</string>
         </dict>

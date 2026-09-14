@@ -44,7 +44,7 @@ contexts[] {
       : include "floatingPoints" ;
       : include "integers" ;
       : pattern {
-         regex \= (\b(SELECT|select|STREAM|stream|FROM|from|DECLARE|declare|RETENTION|retention|FILE|file|STORAGE|storage|ROTATION|rotation|SUBSTRAT|substrat|VOLATILE|volatile|RULE|rule|DISPOSABLE|disposable|ONESHOT|oneshot|HOLD|hold|NOCACHE|nocache|CACHE|cache|ON|on|WHEN|when|DO|do|DUMP|dump|SYSTEM|system|TO|to|AND|and|OR|or|NOT|not)\b)
+         regex \= (\b(SELECT|select|STREAM|stream|FROM|from|DECLARE|declare|RETENTION|retention|FILE|file|STORAGE|storage|ROTATION|rotation|SUBSTRAT|substrat|VOLATILE|volatile|PERSISTENT|persistent|RULE|rule|DISPOSABLE|disposable|ONESHOT|oneshot|HOLD|hold|NOCACHE|nocache|CACHE|cache|ON|on|WHEN|when|DO|do|DUMP|dump|SYSTEM|system|TO|to|AND|and|OR|or|NOT|not)\b)
          styles [] = .keyword;
       }
       : pattern {
@@ -52,11 +52,15 @@ contexts[] {
          styles [] = .type;
       }
       : pattern {
-         regex \= (\b(MIN|min|MAX|max|AVG|avg|SUMC|sumc|Sqrt|Ceil|Abs|Floor|Sign|Chr|Length|ToNumber|ToTimeStamp|FloatCast|IntCast|Count|Crc|Sum|IsZero|IsNonZero|isnull|to_integer|to_float|to_double|to_string)\b)
+         regex \= (\b(MIN|min|MAX|max|AVG|avg|SUMC|sumc)\b)
          styles [] = .desc;
       }
       : pattern {
-         regex \= (#\s.*)
+         regex \= (\b(?i:sqrt|ceil|floor|abs|round|trunc|sin|cos|exp|tan|log2|log|isnull|null2zero|iszero|isnonzero|length|to_integer|to_float|to_double|to_string|int|float|real|str)\b(?=\s*\())
+         styles [] = .desc;
+      }
+      : pattern {
+         regex \= (^\s*#.*)
          styles [] = .comment_hash;
       }
       : pattern {
@@ -64,7 +68,7 @@ contexts[] {
          styles [] = .comment_slash;
       }
       : pattern {
-         regex \= ([#&%/>+])
+         regex \= ([#&%/>+@^$:])
          styles [] = .operator;
       }
       : inline_push {
