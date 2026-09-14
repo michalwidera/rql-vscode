@@ -49,19 +49,19 @@
           <key>match</key>
           <string>(\b(INTEGER|Integer|BYTE|Byte|CHAR|Char|UINT|Uint|STRING|String|FLOAT|Float|DOUBLE|Double|MEMORY|memory|DEFAULT|default|DIRECT|direct|POSIX|posix|POSIXSHD|posixshd|GENERIC|generic|DEVICE|device|TEXTSOURCE|textsource)\b)</string>
           <key>name</key>
-          <string>type.rql</string>
+          <string>storage.type.rql</string>
         </dict>
         <dict>
           <key>match</key>
           <string>(\b(MIN|min|MAX|max|AVG|avg|SUMC|sumc)\b)</string>
           <key>name</key>
-          <string>desc.rql</string>
+          <string>support.function.rql</string>
         </dict>
         <dict>
           <key>match</key>
           <string>(\b(?i:sqrt|ceil|floor|abs|round|trunc|sin|cos|exp|tan|log2|log|isnull|null2zero|iszero|isnonzero|length|to_integer|to_float|to_double|to_string|int|float|real|str)\b(?=\s*\())</string>
           <key>name</key>
-          <string>desc.rql</string>
+          <string>support.function.rql</string>
         </dict>
         <dict>
           <key>match</key>
@@ -89,11 +89,11 @@
             <key>1</key>
             <dict>
               <key>name</key>
-              <string>quoted.rql</string>
+              <string>string.quoted.single.rql</string>
             </dict>
           </dict>
           <key>contentName</key>
-          <string>quoted.rql</string>
+          <string>string.quoted.single.rql</string>
           <key>end</key>
           <string>(\&apos;)</string>
           <key>endCaptures</key>
@@ -101,7 +101,7 @@
             <key>1</key>
             <dict>
               <key>name</key>
-              <string>quoted.rql</string>
+              <string>string.quoted.single.rql</string>
             </dict>
           </dict>
         </dict>
@@ -115,7 +115,7 @@
           <key>match</key>
           <string>(\b[0-9][0-9]*)(\.)(\b[0-9][0-9]*)</string>
           <key>name</key>
-          <string>numeric.rql</string>
+          <string>constant.numeric.rql</string>
         </dict>
        </array>
     </dict>
@@ -127,7 +127,7 @@
           <key>match</key>
           <string>(\b[0-9][0-9]*)</string>
           <key>name</key>
-          <string>numeric.rql</string>
+          <string>constant.numeric.rql</string>
         </dict>
        </array>
     </dict>

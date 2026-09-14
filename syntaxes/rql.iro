@@ -32,10 +32,10 @@ styles[] {
    .comment_block : style color = "#808080" textmate_scope = "comment.block";
    .keyword  : style color = "#FF6666"     textmate_scope = "keyword";
    .operator : style color = "#FF6666"     textmate_scope = "keyword.operator";
-   .type     : style color = "#33FFFF"     textmate_scope = "type";
-   .desc     : style color = "white"       textmate_scope = "desc";
-   .quoted   : style color = "orange"      textmate_scope = "quoted";
-   .numeric  : style color = "#FF66FF"     textmate_scope = "numeric";
+   .type     : style color = "#33FFFF"     textmate_scope = "storage.type";
+   .desc     : style color = "white"       textmate_scope = "support.function";
+   .quoted   : style color = "orange"      textmate_scope = "string.quoted.single";
+   .numeric  : style color = "#FF66FF"     textmate_scope = "constant.numeric";
 }
 contexts[] {
 
