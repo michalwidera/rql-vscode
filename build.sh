@@ -148,12 +148,53 @@ install_vsix() {
     if ! command -v code &>/dev/null; then
         warn "Polecenie 'code' niedostępne — pomiń instalację automatyczną."
         warn "Zainstaluj ręcznie: Extensions → ... → Install from VSIX → $vsix"
-        return
+    else
+        info "Instalowanie: $vsix"
+        code --install-extension "$vsix"
+        info "Instalacja zakończona. Przeładuj VS Code: Ctrl+Shift+P → Developer: Reload Window"
     fi
 
-    info "Instalowanie: $vsix"
-    code --install-extension "$vsix"
-    info "Instalacja zakończona. Przeładuj VS Code: Ctrl+Shift+P → Developer: Reload Window"
+    if is_wsl; then
+        offer_windows_install "$vsix"
+    fi
+}
+
+# ---------------------------------------------------------------------------
+# Instalacja .vsix po stronie Windows (WSL)
+#
+# 'code' w WSL to klient VS Code Server — instaluje rozszerzenie tylko po stronie
+# WSL. Lokalny VS Code w Windows ma osobny katalog rozszerzeń i zostaje ze starą
+# wersją. Windowsowy code.cmd nie rozumie ścieżek WSL, więc .vsix jedzie przez %TEMP%.
+# ---------------------------------------------------------------------------
+offer_windows_install() {
+    local vsix="$1"
+
+    command -v powershell.exe &>/dev/null || { warn "powershell.exe niedostępny — pomijam instalację po stronie Windows."; return 0; }
+
+    if [[ ! -t 0 ]]; then
+        info "WSL: aby zainstalować także w VS Code po stronie Windows, uruchom interaktywnie: ./build.sh install"
+        return 0
+    fi
+
+    local answer
+    read -r -p "Wykryto WSL. Zainstalować rozszerzenie również w VS Code po stronie Windows? [t/N] " answer
+    [[ "$answer" =~ ^[tTyY]$ ]] || return 0
+
+    local wintemp
+    wintemp=$(cd /mnt/c && powershell.exe -NoProfile -Command '$env:TEMP' | tr -d '\r')
+    [[ -n "$wintemp" ]] || { error "Nie udało się ustalić %TEMP% po stronie Windows."; return 0; }
+
+    local name
+    name=$(basename "$vsix")
+    cp "$vsix" "$(wslpath -u "$wintemp")/$name"
+
+    info "Instalowanie po stronie Windows: $name"
+    if (cd /mnt/c && powershell.exe -NoProfile -Command "code.cmd --install-extension '$wintemp\\$name' --force"); then
+        info "Instalacja w Windows zakończona. Przeładuj VS Code: Ctrl+Shift+P → Developer: Reload Window"
+    else
+        error "Instalacja po stronie Windows nie powiodła się."
+    fi
+    rm -f "$(wslpath -u "$wintemp")/$name"
 }
 
 # ---------------------------------------------------------------------------
