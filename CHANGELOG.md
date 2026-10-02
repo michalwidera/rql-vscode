@@ -6,6 +6,8 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased]
 
+## [0.0.6]
+
 - Rodzaje źródeł `DECLARE`: słowa kluczowe `BINFILE`, `TEXTFILE` i `DEVICE` (retractordb #346).
 - `FILE` w `DECLARE` zaraz po interwale oznaczony zakresem `invalid.deprecated`; `FILE` w `SELECT` bez zmian.
 - `DEVICE` i `TEXTSOURCE` usunięte z profili pamięci (nie są profilami `STORAGE`); `TEXTSOURCE` zostaje jako typ w plikach `.desc`.
