@@ -36,6 +36,7 @@ styles[] {
    .desc     : style color = "white"       textmate_scope = "support.function";
    .quoted   : style color = "orange"      textmate_scope = "string.quoted.single";
    .numeric  : style color = "#FF66FF"     textmate_scope = "constant.numeric";
+   .deprecated : style color = "#FF6666"   textmate_scope = "invalid.deprecated";
 }
 contexts[] {
 
@@ -43,12 +44,18 @@ contexts[] {
       : include "multi_line_comment" ;
       : include "floatingPoints" ;
       : include "integers" ;
+      # DECLARE ... FILE - forma przestarzala (#346). FILE stoi tu zaraz po interwale
+      # deklaracji, czego w SELECT ... FILE nie ma. Wiersz kontynuacji `\` nie jest rozpoznawany.
       : pattern {
-         regex \= (\b(SELECT|select|STREAM|stream|FROM|from|DECLARE|declare|RETENTION|retention|FILE|file|STORAGE|storage|ROTATION|rotation|SUBSTRAT|substrat|VOLATILE|volatile|PERSISTENT|persistent|RULE|rule|DISPOSABLE|disposable|ONESHOT|oneshot|HOLD|hold|NOCACHE|nocache|CACHE|cache|ON|on|WHEN|when|DO|do|DUMP|dump|SYSTEM|system|TO|to|AND|and|OR|or|NOT|not)\b)
+         regex \= (,\s*[0-9][0-9.]*(?:\s*/\s*[0-9]+)?\s+)((?:FILE|file)\b)
+         styles [] = .numeric, .deprecated;
+      }
+      : pattern {
+         regex \= (\b(SELECT|select|STREAM|stream|FROM|from|DECLARE|declare|RETENTION|retention|FILE|file|BINFILE|binfile|TEXTFILE|textfile|DEVICE|device|STORAGE|storage|ROTATION|rotation|SUBSTRAT|substrat|VOLATILE|volatile|PERSISTENT|persistent|RULE|rule|DISPOSABLE|disposable|ONESHOT|oneshot|HOLD|hold|NOCACHE|nocache|CACHE|cache|ON|on|WHEN|when|DO|do|DUMP|dump|SYSTEM|system|TO|to|AND|and|OR|or|NOT|not)\b)
          styles [] = .keyword;
       }
       : pattern {
-         regex \= (\b(INTEGER|Integer|BYTE|Byte|CHAR|Char|UINT|Uint|STRING|String|FLOAT|Float|DOUBLE|Double|MEMORY|memory|DEFAULT|default|DIRECT|direct|POSIX|posix|POSIXSHD|posixshd|GENERIC|generic|DEVICE|device|TEXTSOURCE|textsource)\b)
+         regex \= (\b(INTEGER|Integer|BYTE|Byte|CHAR|Char|UINT|Uint|STRING|String|FLOAT|Float|DOUBLE|Double|MEMORY|memory|DEFAULT|default|DIRECT|direct|POSIX|posix|POSIXSHD|posixshd|GENERIC|generic|TEXTSOURCE|textsource)\b)
          styles [] = .type;
       }
       : pattern {

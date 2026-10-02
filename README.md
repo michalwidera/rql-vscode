@@ -9,10 +9,12 @@ Rozszerzenie obsługuje pliki `.rql` oraz `.desc` i podświetla:
 | Kategoria | Przykłady |
 |---|---|
 | Słowa kluczowe | `SELECT`, `DECLARE`, `RULE`, `FROM`, `STREAM`, `WHEN`, `DO`, `DUMP` |
+| Rodzaje źródeł `DECLARE` | `BINFILE`, `TEXTFILE`, `DEVICE` |
+| Forma przestarzała | `FILE` w `DECLARE` zaraz po interwale (`..., 0.1 FILE 'x'`) - zakres `invalid.deprecated` |
 | Dyrektywy kompilatora | `STORAGE`, `ROTATION`, `SUBSTRAT` |
 | Operatory logiczne | `AND`, `OR`, `NOT` |
 | Typy danych | `INTEGER`, `FLOAT`, `DOUBLE`, `STRING`, `BYTE`, `CHAR`, `UINT` |
-| Profile pamięci | `MEMORY`, `DIRECT`, `POSIX`, `POSIXSHD`, `DEVICE`, `TEXTSOURCE` |
+| Profile pamięci | `MEMORY`, `DIRECT`, `POSIX`, `POSIXSHD`, `GENERIC` (oraz typ `TEXTSOURCE` w plikach `.desc`) |
 | Agregatory | `MIN`, `MAX`, `AVG`, `SUMC` |
 | Funkcje wbudowane | `Sqrt`, `Ceil`, `Abs`, `ToNumber`, `FloatCast`, `to_integer`, `isnull`, ... |
 
