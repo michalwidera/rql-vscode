@@ -46,6 +46,10 @@ styles[] {
       color = #FF6666
       textmate_scope = keyword.operator
    }
+   .logical : style {
+      color = #FFCC66
+      textmate_scope = keyword.operator.logical
+   }
    .type : style {
       color = #33FFFF
       textmate_scope = storage.type
@@ -105,8 +109,12 @@ contexts[] {
       : include "floatingPoints" ;
       : include "integers" ;
       : pattern {
-         regex \= (\b(?:SELECT|select|STREAM|stream|FROM|from|DECLARE|declare|RETENTION|retention|FILE|file|BINFILE|binfile|TEXTFILE|textfile|DEVICE|device|STORAGE|storage|ROTATION|rotation|SUBSTRAT|substrat|VOLATILE|volatile|PERSISTENT|persistent|RULE|rule|DISPOSABLE|disposable|ONESHOT|oneshot|HOLD|hold|TIMEOUT|timeout|DEFAULT|default|ON|on|WHEN|when|DO|do|DUMP|dump|SYSTEM|system|TO|to|AND|and|OR|or|NOT|not)(?![A-Za-z_$0-9]))
+         regex \= (\b(?:SELECT|select|STREAM|stream|FROM|from|DECLARE|declare|RETENTION|retention|FILE|file|BINFILE|binfile|TEXTFILE|textfile|DEVICE|device|STORAGE|storage|ROTATION|rotation|SUBSTRAT|substrat|VOLATILE|volatile|PERSISTENT|persistent|RULE|rule|DISPOSABLE|disposable|ONESHOT|oneshot|HOLD|hold|TIMEOUT|timeout|DEFAULT|default|ON|on|WHEN|when|DO|do|DUMP|dump|SYSTEM|system|TO|to)(?![A-Za-z_$0-9]))
          styles [] = .keyword;
+      }
+      : pattern {
+         regex \= (\b(?:AND|and|OR|or|NOT|not)(?![A-Za-z_$0-9]))
+         styles [] = .logical;
       }
       : pattern {
          regex \= (\b(?:INTEGER|Integer|BYTE|Byte|CHAR|Char|UINT|Uint|STRING|String|FLOAT|Float|DOUBLE|Double|MEMORY|memory|DIRECT|direct|POSIX|posix|POSIXSHD|posixshd|GENERIC|generic)(?![A-Za-z_$0-9]))

@@ -6,6 +6,10 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased]
 
+## [0.0.8]
+
+- Wydzielono `AND`, `OR` i `NOT` do zakresu `keyword.operator.logical.rql`, aby umozliwic osobny kolor operatorow logicznych.
+
 ## [0.0.7]
 
 - Dodano `TIMEOUT` i osobny kontekst deskryptorow z `TYPE`, `REF`, `RETMEMORY` oraz `RATIONAL`.

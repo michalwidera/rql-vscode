@@ -12,7 +12,8 @@ Rozszerzenie obsługuje pliki `.rql` oraz `.desc` i podświetla:
 | Rodzaje źródeł `DECLARE` | `BINFILE`, `TEXTFILE`, `DEVICE`, opcja `TIMEOUT` |
 | Formy przestarzałe | `FILE` w `DECLARE` zaraz po interwale oraz agregatory przyrostkowe (`s.min`, `s.max`, `s.avg`, `s.sumc`) - zakres `invalid.deprecated` |
 | Dyrektywy kompilatora | `STORAGE`, `ROTATION`, `SUBSTRAT` |
-| Operatory | `AND`, `OR`, `NOT`, `=`, `!=`, `<`, `<=`, `>`, `>=`, `+`, `-`, `*`, `/`, `~`, `^`, `#`, `&`, `%`, `@`, `$`, `:` |
+| Operatory logiczne | `AND`, `OR`, `NOT` - osobny zakres `keyword.operator.logical.rql` |
+| Pozostałe operatory | `=`, `!=`, `<`, `<=`, `>`, `>=`, `+`, `-`, `*`, `/`, `~`, `^`, `#`, `&`, `%`, `@`, `$`, `:` |
 | Typy danych | `INTEGER`, `FLOAT`, `DOUBLE`, `STRING`, `BYTE`, `CHAR`, `UINT`; dodatkowo `RATIONAL` w deskryptorach |
 | Polecenia deskryptorów | `TYPE`, `REF`, `RETENTION`, `RETMEMORY` wewnątrz `{ ... }` |
 | Profile pamięci | `MEMORY`, `DIRECT`, `POSIX`, `POSIXSHD`, `GENERIC` (oraz typ `TEXTSOURCE` w plikach `.desc`) |
@@ -100,6 +101,74 @@ Otwórz dowolny plik z rozszerzeniem `.rql` lub `.desc`. W prawym dolnym rogu pa
 
 Jeśli kolorowanie nie działa, upewnij się że wybrany motyw kolorystyczny obsługuje zakresy TextMate (`keyword`, `type`, `comment`, `string`, `constant`).
 
+## Kolory w jasnym i ciemnym motywie
+
+Od wersji **0.0.8** operatory logiczne `AND`, `OR` i `NOT` mają osobny zakres TextMate. Można dzięki temu nadać im kolor różny od poleceń i typów danych. Napisy w apostrofach oraz ścieżki deskryptorów w cudzysłowach także mają własne zakresy.
+
+Gramatyka klasyfikuje tokeny, a konkretne kolory wybiera motyw lub ustawienia VS Code. Wartości `color` w `rql.iro` nie ustawiają kolorów w VS Code. Poniższa paleta wymaga dodania konfiguracji do `settings.json`; instalacja rozszerzenia sama jej nie włącza.
+
+| Kategoria | Zakres TextMate | Jasny motyw | Ciemny motyw |
+|---|---|---|---|
+| Polecenia, np. `SELECT`, `DECLARE` | `keyword.rql` | `#A31515` - ciemnoczerwony | `#F48771` - jasnoczerwony |
+| Typy, np. `INTEGER`, `BYTE`, `STRING` | `storage.type.rql` | `#006B75` - ciemny turkus | `#4EC9B0` - jasny turkus |
+| Operatory logiczne `AND`, `OR`, `NOT` | `keyword.operator.logical.rql` | `#795E00` - ochra | `#DCDCAA` - jasnożółty |
+| Napisy `'...'` oraz ścieżki `REF "..."` | `string.quoted.single.rql`, `string.quoted.double.rql` | `#7A3E9D` - ciemnofioletowy | `#CE9FF2` - jasnofioletowy |
+
+Paletę sprawdzono dla `Light 2026`, `Dark 2026`, `Light Modern`, `Dark Modern`, `Light+` i `Dark+`. Kontrast wszystkich czterech kategorii względem tła edytora tych motywów przekracza 6:1. Ciemny turkus w jasnym motywie zastępuje jaskrawy `#33FFFF`, który jest słabo widoczny na białym tle.
+
+Otwórz **Preferences: Open User Settings (JSON)** i dodaj poniższą konfigurację. W WSL można użyć **Preferences: Open Remote Settings (JSON)**. Jeśli `editor.tokenColorCustomizations` już istnieje, połącz wpisy z obecną konfiguracją.
+
+```json
+{
+  "editor.tokenColorCustomizations": {
+    "[*Light*][*light*]": {
+      "textMateRules": [
+        {
+          "scope": "keyword.rql",
+          "settings": { "foreground": "#A31515" }
+        },
+        {
+          "scope": "storage.type.rql",
+          "settings": { "foreground": "#006B75" }
+        },
+        {
+          "scope": "keyword.operator.logical.rql",
+          "settings": { "foreground": "#795E00" }
+        },
+        {
+          "scope": ["string.quoted.single.rql", "string.quoted.double.rql"],
+          "settings": { "foreground": "#7A3E9D" }
+        }
+      ]
+    },
+    "[*Dark*][*dark*][Monokai][Monokai Dimmed][Abyss][Red][Tomorrow Night Blue][Default High Contrast]": {
+      "textMateRules": [
+        {
+          "scope": "keyword.rql",
+          "settings": { "foreground": "#F48771" }
+        },
+        {
+          "scope": "storage.type.rql",
+          "settings": { "foreground": "#4EC9B0" }
+        },
+        {
+          "scope": "keyword.operator.logical.rql",
+          "settings": { "foreground": "#DCDCAA" }
+        },
+        {
+          "scope": ["string.quoted.single.rql", "string.quoted.double.rql"],
+          "settings": { "foreground": "#CE9FF2" }
+        }
+      ]
+    }
+  }
+}
+```
+
+Reguły wybierają paletę według nazwy motywu: `Light` lub `light` dla jasnej i `Dark` lub `dark` dla ciemnej. Dodatkowo wymieniono kilka ciemnych motywów bez tych słów w nazwie. Motywy niepasujące do żadnego wpisu zachowują własną paletę; aby zastosować powyższe kolory, dopisz ich nazwę w odpowiedniej grupie. Kolory zmieniają się wraz z wyborem pasującego motywu, bez ponownego budowania rozszerzenia. Szczegóły opisuje [dokumentacja konfiguracji motywów VS Code](https://code.visualstudio.com/docs/configure/themes#_editor-syntax-highlighting).
+
+Kolorowanie napisów, np. `'dane.txt'`, dotyczy literałów tekstowych. Nazwy pól zadeklarowanych jako `STRING` nadal mają zakres `variable.other.rql`, tak jak pozostałe identyfikatory. Rozróżnianie ich według typu wymagałoby dodania analizy semantycznej do rozszerzenia.
+
 ## Aktualizacja gramatyki
 
 Gramatyka jest utrzymywana w pliku `syntaxes/rql.iro` (format [Iro](https://eeyo.io/iro/)) i synchronizowana z `RQL.g4` oraz `DESC.g4` projektu RetractorDB. Nazwy funkcji skalarnych pochodzą z `src/include/rqlFunctions.hpp`. Wygenerowany plik `syntaxes/rql.tmLanaguage` jest gotowy do użycia bez dodatkowych kroków. Deskryptory mają osobny kontekst podświetlania wewnątrz `{ ... }`.
@@ -121,6 +190,11 @@ Alternatywnie można wkleić plik do [Iro online](https://eeyo.io/iro/), wybrać
 - Oznaczanie przestarzałego `DECLARE ... FILE` wymaga interwału i `FILE` w tym samym fizycznym wierszu.
 
 ## Historia zmian
+
+### 0.0.8
+
+- Wydzielono `AND`, `OR` i `NOT` do zakresu `keyword.operator.logical.rql`.
+- Opisano konfigurację osobnych kolorów poleceń, typów, operatorów logicznych i napisów dla jasnych oraz ciemnych motywów.
 
 ### 0.0.7
 

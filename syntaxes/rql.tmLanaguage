@@ -105,9 +105,15 @@
         </dict>
         <dict>
           <key>match</key>
-          <string>(\b(?:SELECT|select|STREAM|stream|FROM|from|DECLARE|declare|RETENTION|retention|FILE|file|BINFILE|binfile|TEXTFILE|textfile|DEVICE|device|STORAGE|storage|ROTATION|rotation|SUBSTRAT|substrat|VOLATILE|volatile|PERSISTENT|persistent|RULE|rule|DISPOSABLE|disposable|ONESHOT|oneshot|HOLD|hold|TIMEOUT|timeout|DEFAULT|default|ON|on|WHEN|when|DO|do|DUMP|dump|SYSTEM|system|TO|to|AND|and|OR|or|NOT|not)(?![A-Za-z_$0-9]))</string>
+          <string>(\b(?:SELECT|select|STREAM|stream|FROM|from|DECLARE|declare|RETENTION|retention|FILE|file|BINFILE|binfile|TEXTFILE|textfile|DEVICE|device|STORAGE|storage|ROTATION|rotation|SUBSTRAT|substrat|VOLATILE|volatile|PERSISTENT|persistent|RULE|rule|DISPOSABLE|disposable|ONESHOT|oneshot|HOLD|hold|TIMEOUT|timeout|DEFAULT|default|ON|on|WHEN|when|DO|do|DUMP|dump|SYSTEM|system|TO|to)(?![A-Za-z_$0-9]))</string>
           <key>name</key>
           <string>keyword.rql</string>
+        </dict>
+        <dict>
+          <key>match</key>
+          <string>(\b(?:AND|and|OR|or|NOT|not)(?![A-Za-z_$0-9]))</string>
+          <key>name</key>
+          <string>keyword.operator.logical.rql</string>
         </dict>
         <dict>
           <key>match</key>
