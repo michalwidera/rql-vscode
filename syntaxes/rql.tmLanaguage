@@ -1,22 +1,21 @@
-<?xml  version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN"   "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0" >
-<!-- Generated via Iro -->
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
 <dict>
   <key>fileTypes</key>
-  <array> 
+  <array>
     <string>rql</string>
     <string>desc</string>
-   </array>
+  </array>
   <key>name</key>
   <string>rql</string>
   <key>patterns</key>
-  <array> 
+  <array>
     <dict>
       <key>include</key>
       <string>#main</string>
     </dict>
-   </array>
+  </array>
   <key>scopeName</key>
   <string>source.rql</string>
   <key>uuid</key>
@@ -26,10 +25,75 @@
     <key>main</key>
     <dict>
       <key>patterns</key>
-      <array> 
+      <array>
         <dict>
           <key>include</key>
           <string>#multi_line_comment</string>
+        </dict>
+        <dict>
+          <key>begin</key>
+          <string>(\{)</string>
+          <key>beginCaptures</key>
+          <dict>
+            <key>1</key>
+            <dict>
+              <key>name</key>
+              <string>punctuation.rql</string>
+            </dict>
+          </dict>
+          <key>patterns</key>
+          <array>
+            <dict>
+              <key>include</key>
+              <string>#iro_inline_1</string>
+            </dict>
+          </array>
+          <key>end</key>
+          <string>(\})</string>
+          <key>endCaptures</key>
+          <dict>
+            <key>1</key>
+            <dict>
+              <key>name</key>
+              <string>punctuation.rql</string>
+            </dict>
+          </dict>
+        </dict>
+        <dict>
+          <key>match</key>
+          <string>(^\s*#.*)</string>
+          <key>name</key>
+          <string>comment.line.number-sign.rql</string>
+        </dict>
+        <dict>
+          <key>include</key>
+          <string>#line_comment</string>
+        </dict>
+        <dict>
+          <key>include</key>
+          <string>#single_quoted</string>
+        </dict>
+        <dict>
+          <key>match</key>
+          <string>(,\s*)((?:[0-9]+\s*/\s*[0-9]+|[0-9]+\.[0-9]*|\.[0-9]+|[0-9]+)\s+)((?:FILE|file)(?![A-Za-z_$0-9]))</string>
+          <key>captures</key>
+          <dict>
+            <key>1</key>
+            <dict>
+              <key>name</key>
+              <string>punctuation.rql</string>
+            </dict>
+            <key>2</key>
+            <dict>
+              <key>name</key>
+              <string>constant.numeric.rql</string>
+            </dict>
+            <key>3</key>
+            <dict>
+              <key>name</key>
+              <string>invalid.deprecated.rql</string>
+            </dict>
+          </dict>
         </dict>
         <dict>
           <key>include</key>
@@ -41,13 +105,25 @@
         </dict>
         <dict>
           <key>match</key>
-          <string>(,\s*[0-9][0-9.]*(?:\s*/\s*[0-9]+)?\s+)((?:FILE|file)\b)</string>
+          <string>(\b(?:SELECT|select|STREAM|stream|FROM|from|DECLARE|declare|RETENTION|retention|FILE|file|BINFILE|binfile|TEXTFILE|textfile|DEVICE|device|STORAGE|storage|ROTATION|rotation|SUBSTRAT|substrat|VOLATILE|volatile|PERSISTENT|persistent|RULE|rule|DISPOSABLE|disposable|ONESHOT|oneshot|HOLD|hold|TIMEOUT|timeout|DEFAULT|default|ON|on|WHEN|when|DO|do|DUMP|dump|SYSTEM|system|TO|to|AND|and|OR|or|NOT|not)(?![A-Za-z_$0-9]))</string>
+          <key>name</key>
+          <string>keyword.rql</string>
+        </dict>
+        <dict>
+          <key>match</key>
+          <string>(\b(?:INTEGER|Integer|BYTE|Byte|CHAR|Char|UINT|Uint|STRING|String|FLOAT|Float|DOUBLE|Double|MEMORY|memory|DIRECT|direct|POSIX|posix|POSIXSHD|posixshd|GENERIC|generic)(?![A-Za-z_$0-9]))</string>
+          <key>name</key>
+          <string>storage.type.rql</string>
+        </dict>
+        <dict>
+          <key>match</key>
+          <string>(\.\s*)((?:MIN|min|MAX|max|AVG|avg|SUMC|sumc)(?![A-Za-z_$0-9]))</string>
           <key>captures</key>
           <dict>
             <key>1</key>
             <dict>
               <key>name</key>
-              <string>constant.numeric.rql</string>
+              <string>punctuation.rql</string>
             </dict>
             <key>2</key>
             <dict>
@@ -58,106 +134,118 @@
         </dict>
         <dict>
           <key>match</key>
-          <string>(\b(SELECT|select|STREAM|stream|FROM|from|DECLARE|declare|RETENTION|retention|FILE|file|BINFILE|binfile|TEXTFILE|textfile|DEVICE|device|STORAGE|storage|ROTATION|rotation|SUBSTRAT|substrat|VOLATILE|volatile|PERSISTENT|persistent|RULE|rule|DISPOSABLE|disposable|ONESHOT|oneshot|HOLD|hold|NOCACHE|nocache|CACHE|cache|ON|on|WHEN|when|DO|do|DUMP|dump|SYSTEM|system|TO|to|AND|and|OR|or|NOT|not)\b)</string>
-          <key>name</key>
-          <string>keyword.rql</string>
-        </dict>
-        <dict>
-          <key>match</key>
-          <string>(\b(INTEGER|Integer|BYTE|Byte|CHAR|Char|UINT|Uint|STRING|String|FLOAT|Float|DOUBLE|Double|MEMORY|memory|DEFAULT|default|DIRECT|direct|POSIX|posix|POSIXSHD|posixshd|GENERIC|generic|TEXTSOURCE|textsource)\b)</string>
-          <key>name</key>
-          <string>storage.type.rql</string>
-        </dict>
-        <dict>
-          <key>match</key>
-          <string>(\b(MIN|min|MAX|max|AVG|avg|SUMC|sumc)\b)</string>
+          <string>(\b(?:MIN|min|MAX|max|AVG|avg|SUMC|sumc)(?![A-Za-z_$0-9]))</string>
           <key>name</key>
           <string>support.function.rql</string>
         </dict>
         <dict>
           <key>match</key>
-          <string>(\b(?i:sqrt|ceil|floor|abs|round|trunc|sin|cos|exp|tan|log2|log|isnull|null2zero|iszero|isnonzero|length|to_integer|to_float|to_double|to_string|int|float|real|str)\b(?=\s*\())</string>
+          <string>(\b(?i:sqrt|ceil|floor|abs|round|trunc|sin|cos|exp|tan|log2|log|isnull|null2zero|iszero|isnonzero|length|to_integer|to_float|to_double|to_string|int|float|real|str)(?![A-Za-z_$0-9])(?=\s*\())</string>
           <key>name</key>
           <string>support.function.rql</string>
         </dict>
         <dict>
           <key>match</key>
-          <string>(^\s*#.*)</string>
-          <key>name</key>
-          <string>comment.line.number-sign.rql</string>
-        </dict>
-        <dict>
-          <key>match</key>
-          <string>(//.*)</string>
-          <key>name</key>
-          <string>comment.line.double-slash.rql</string>
-        </dict>
-        <dict>
-          <key>match</key>
-          <string>([\x{0023}\x{0026}\x{0025}\x{002f}\x{003e}\x{002b}\x{0040}\x{005e}\x{0024}\x{003a}])</string>
+          <string>(::|!=|&gt;=|&lt;=|\|\||[#&amp;%/&gt;+@^$:=&lt;!*~|_\-])</string>
           <key>name</key>
           <string>keyword.operator.rql</string>
         </dict>
         <dict>
+          <key>match</key>
+          <string>([\[\](),.;]|\\$)</string>
+          <key>name</key>
+          <string>punctuation.rql</string>
+        </dict>
+        <dict>
+          <key>include</key>
+          <string>#identifier</string>
+        </dict>
+      </array>
+    </dict>
+    <key>descriptor</key>
+    <dict>
+      <key>patterns</key>
+      <array>
+        <dict>
+          <key>include</key>
+          <string>#multi_line_comment</string>
+        </dict>
+        <dict>
+          <key>match</key>
+          <string>(# .*)</string>
+          <key>name</key>
+          <string>comment.line.number-sign.rql</string>
+        </dict>
+        <dict>
+          <key>include</key>
+          <string>#line_comment</string>
+        </dict>
+        <dict>
           <key>begin</key>
-          <string>(\&apos;)</string>
+          <string>(")</string>
           <key>beginCaptures</key>
           <dict>
             <key>1</key>
             <dict>
               <key>name</key>
-              <string>string.quoted.single.rql</string>
+              <string>string.quoted.double.rql</string>
             </dict>
           </dict>
           <key>contentName</key>
-          <string>string.quoted.single.rql</string>
+          <string>string.quoted.double.rql</string>
           <key>end</key>
-          <string>(\&apos;)</string>
+          <string>(")</string>
           <key>endCaptures</key>
           <dict>
             <key>1</key>
             <dict>
               <key>name</key>
-              <string>string.quoted.single.rql</string>
+              <string>string.quoted.double.rql</string>
             </dict>
           </dict>
         </dict>
-       </array>
-    </dict>
-    <key>floatingPoints</key>
-    <dict>
-      <key>patterns</key>
-      <array> 
+        <dict>
+          <key>include</key>
+          <string>#single_quoted</string>
+        </dict>
+        <dict>
+          <key>include</key>
+          <string>#integers</string>
+        </dict>
         <dict>
           <key>match</key>
-          <string>(\b[0-9][0-9]*)(\.)(\b[0-9][0-9]*)</string>
+          <string>(\b(?:TYPE|REF|RETENTION|RETMEMORY)(?![A-Za-z_$0-9]))</string>
           <key>name</key>
-          <string>constant.numeric.rql</string>
+          <string>keyword.rql</string>
         </dict>
-       </array>
-    </dict>
-    <key>integers</key>
-    <dict>
-      <key>patterns</key>
-      <array> 
         <dict>
           <key>match</key>
-          <string>(\b[0-9][0-9]*)</string>
+          <string>(\b(?:BYTE|STRING|UINT|INTEGER|FLOAT|DOUBLE|RATIONAL)(?![A-Za-z_$0-9]))</string>
           <key>name</key>
-          <string>constant.numeric.rql</string>
+          <string>storage.type.rql</string>
         </dict>
-       </array>
-    </dict>
-    <key>main__1</key>
-    <dict>
-      <key>patterns</key>
-      <array> 
-       </array>
+        <dict>
+          <key>match</key>
+          <string>(\b(?:DEFAULT|MEMORY|DIRECT|POSIX|POSIXSHD|GENERIC|BINFILE|DEVICE|TEXTSOURCE)(?![A-Za-z_$0-9]))</string>
+          <key>name</key>
+          <string>storage.type.rql</string>
+        </dict>
+        <dict>
+          <key>match</key>
+          <string>([\[\]])</string>
+          <key>name</key>
+          <string>punctuation.rql</string>
+        </dict>
+        <dict>
+          <key>include</key>
+          <string>#identifier</string>
+        </dict>
+      </array>
     </dict>
     <key>multi_line_comment</key>
     <dict>
       <key>patterns</key>
-      <array> 
+      <array>
         <dict>
           <key>begin</key>
           <string>(/\*)</string>
@@ -169,8 +257,13 @@
               <string>comment.block.rql</string>
             </dict>
           </dict>
-          <key>contentName</key>
-          <string>comment.block.rql</string>
+          <key>patterns</key>
+          <array>
+            <dict>
+              <key>include</key>
+              <string>#iro_inline_2</string>
+            </dict>
+          </array>
           <key>end</key>
           <string>(\*/)</string>
           <key>endCaptures</key>
@@ -182,13 +275,134 @@
             </dict>
           </dict>
         </dict>
-       </array>
+      </array>
     </dict>
-    <key>multi_line_comment__1</key>
+    <key>line_comment</key>
     <dict>
       <key>patterns</key>
-      <array> 
-       </array>
+      <array>
+        <dict>
+          <key>match</key>
+          <string>(//.*)</string>
+          <key>name</key>
+          <string>comment.line.double-slash.rql</string>
+        </dict>
+      </array>
+    </dict>
+    <key>single_quoted</key>
+    <dict>
+      <key>patterns</key>
+      <array>
+        <dict>
+          <key>begin</key>
+          <string>(')</string>
+          <key>beginCaptures</key>
+          <dict>
+            <key>1</key>
+            <dict>
+              <key>name</key>
+              <string>string.quoted.single.rql</string>
+            </dict>
+          </dict>
+          <key>patterns</key>
+          <array>
+            <dict>
+              <key>include</key>
+              <string>#iro_inline_3</string>
+            </dict>
+          </array>
+          <key>end</key>
+          <string>('(?!'))</string>
+          <key>endCaptures</key>
+          <dict>
+            <key>1</key>
+            <dict>
+              <key>name</key>
+              <string>string.quoted.single.rql</string>
+            </dict>
+          </dict>
+        </dict>
+      </array>
+    </dict>
+    <key>floatingPoints</key>
+    <dict>
+      <key>patterns</key>
+      <array>
+        <dict>
+          <key>match</key>
+          <string>((?:[0-9]+\.[0-9]*|\.[0-9]+)(?:E[+-]?[0-9]+)?|[0-9]+E[+-]?[0-9]+)(?![A-Za-z_$0-9])</string>
+          <key>name</key>
+          <string>constant.numeric.rql</string>
+        </dict>
+      </array>
+    </dict>
+    <key>integers</key>
+    <dict>
+      <key>patterns</key>
+      <array>
+        <dict>
+          <key>match</key>
+          <string>([0-9]+)(?![A-Za-z_$0-9])</string>
+          <key>name</key>
+          <string>constant.numeric.rql</string>
+        </dict>
+      </array>
+    </dict>
+    <key>identifier</key>
+    <dict>
+      <key>patterns</key>
+      <array>
+        <dict>
+          <key>match</key>
+          <string>([A-Za-z][A-Za-z_$0-9]*)</string>
+          <key>name</key>
+          <string>variable.other.rql</string>
+        </dict>
+      </array>
+    </dict>
+    <key>iro_inline_1</key>
+    <dict>
+      <key>patterns</key>
+      <array>
+        <dict>
+          <key>include</key>
+          <string>#descriptor</string>
+        </dict>
+      </array>
+    </dict>
+    <key>iro_inline_2</key>
+    <dict>
+      <key>patterns</key>
+      <array>
+        <dict>
+          <key>match</key>
+          <string>([^*/]+|\*(?!/)|/(?!\*))</string>
+          <key>name</key>
+          <string>comment.block.rql</string>
+        </dict>
+        <dict>
+          <key>include</key>
+          <string>#multi_line_comment</string>
+        </dict>
+      </array>
+    </dict>
+    <key>iro_inline_3</key>
+    <dict>
+      <key>patterns</key>
+      <array>
+        <dict>
+          <key>match</key>
+          <string>('')</string>
+          <key>name</key>
+          <string>string.quoted.single.rql</string>
+        </dict>
+        <dict>
+          <key>match</key>
+          <string>([^']+)</string>
+          <key>name</key>
+          <string>string.quoted.single.rql</string>
+        </dict>
+      </array>
     </dict>
   </dict>
 </dict>

@@ -8,6 +8,8 @@ set -euo pipefail
 #   ./build.sh          — zbuduj .vsix i zainstaluj
 #   ./build.sh build    — tylko zbuduj .vsix
 #   ./build.sh install  — zainstaluj ostatnio zbudowany .vsix
+#   ./build.sh install-iro [tag] - pobierz i zainstaluj gotowy release iro4cli
+#   ./build.sh compile-iro - skompiluj syntaxes/rql.iro do gramatyki TextMate
 #   ./build.sh check    — sprawdź zależności bez budowania
 # ---------------------------------------------------------------------------
 
@@ -101,6 +103,60 @@ check_deps() {
     $ok || die "Niektóre wymagania nie są spełnione."
     info "Wszystkie wymagania spełnione."
 }
+
+# ---------------------------------------------------------------------------
+# Kompilowanie gramatyki Iro
+# ---------------------------------------------------------------------------
+compile_iro() (
+    local iro_bin work_dir
+    if ! iro_bin=$(command -v iro); then
+        iro_bin="${IRO_INSTALL_DIR:-$HOME/.local/bin}/iro"
+        [[ -x "$iro_bin" ]] || die "Brak iro. Uruchom: ./build.sh install-iro"
+    fi
+    command -v python3 >/dev/null || die "Brak python3 - wymagany do sprawdzenia wyniku kompilacji."
+    [[ -f syntaxes/rql.iro ]] || die "Brak pliku: syntaxes/rql.iro"
+
+    work_dir=$(mktemp -d "${TMPDIR:-/tmp}/rql-compile-iro.XXXXXX")
+    trap 'rm -rf -- "$work_dir"' EXIT
+    info "Kompilowanie syntaxes/rql.iro przez $iro_bin..."
+    if ! "$iro_bin" syntaxes/rql.iro --textmate --output "$work_dir" >"$work_dir/compiler.log" 2>&1; then
+        cat "$work_dir/compiler.log" >&2
+        die "Kompilacja Iro nie powiodla sie."
+    fi
+    cat "$work_dir/compiler.log" >&2
+    if grep -Eq '^line [0-9]+:[0-9]+|^\[ERROR\]' "$work_dir/compiler.log"; then
+        die "Kompilator Iro zglosil bledy."
+    fi
+    [[ -s "$work_dir/rql.tmLanguage" ]] || die "Kompilator nie utworzyl rql.tmLanguage."
+
+    python3 - "$work_dir/rql.tmLanguage" "$work_dir/validated.tmLanguage" <<'PY'
+from pathlib import Path
+import plistlib
+import sys
+
+grammar = plistlib.loads(Path(sys.argv[1]).read_bytes(), fmt=plistlib.FMT_XML)
+if grammar.get("scopeName") != "source.rql" or not grammar.get("patterns"):
+    sys.exit("Nieprawidlowa gramatyka TextMate dla RQL.")
+
+# iro4cli nadaje kontekstom pomocniczym losowe nazwy. Ustalamy je wedlug
+# kolejnosci eksportu, aby kolejne kompilacje dawaly identyczny plik.
+helpers = [name for name in grammar["repository"] if name.startswith("helper_")]
+aliases = {name: f"iro_inline_{index}" for index, name in enumerate(helpers, 1)}
+
+def normalize(value):
+    if isinstance(value, dict):
+        return {aliases.get(key, key): normalize(item) for key, item in value.items()}
+    if isinstance(value, list):
+        return [normalize(item) for item in value]
+    if isinstance(value, str) and value.startswith("#"):
+        return "#" + aliases.get(value[1:], value[1:])
+    return value
+
+Path(sys.argv[2]).write_bytes(plistlib.dumps(normalize(grammar), sort_keys=False).replace(b"\t", b"  "))
+PY
+    cp "$work_dir/validated.tmLanguage" syntaxes/rql.tmLanaguage
+    info "Wygenerowano: syntaxes/rql.tmLanaguage"
+)
 
 # ---------------------------------------------------------------------------
 # Budowanie .vsix
@@ -203,6 +259,12 @@ offer_windows_install() {
 cd "$(dirname "$0")"
 
 case "$ACTION" in
+    install-iro)
+        ./iro-install.sh "${@:2}"
+        ;;
+    compile-iro)
+        compile_iro
+        ;;
     check)
         check_deps
         ;;
@@ -219,7 +281,7 @@ case "$ACTION" in
         install_vsix "$VSIX"
         ;;
     *)
-        echo "Użycie: $0 [build|install|check|all]"
+        echo "Użycie: $0 [build|install|install-iro [tag]|compile-iro|check|all]"
         exit 1
         ;;
 esac

@@ -6,6 +6,15 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased]
 
+## [0.0.7]
+
+- Dodano `TIMEOUT` i osobny kontekst deskryptorow z `TYPE`, `REF`, `RETMEMORY` oraz `RATIONAL`.
+- Poprawiono podswietlanie sciezek `REF "..."`, podwojonych apostrofow i zagniezdzonych komentarzy blokowych.
+- Uzupelniono operatory i liczby, w tym `.5`, `5.` oraz tokeny z wykladnikiem `E`.
+- Poprawiono komentarze `# ` w deskryptorach i identyfikatory zawierajace `$`.
+- Agregatory przyrostkowe oznaczono jako przestarzale; usunieto `CACHE` i `NOCACHE` z listy slow kluczowych.
+- Uaktualniono opis funkcji skalarnych i skladni komentarzy w README.
+
 ## [0.0.6]
 
 - Rodzaje źródeł `DECLARE`: słowa kluczowe `BINFILE`, `TEXTFILE` i `DEVICE` (retractordb #346).

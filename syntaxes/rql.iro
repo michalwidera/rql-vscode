@@ -25,94 +25,214 @@ name                   = rql
 file_extensions []     = rql, desc;
 textmate_compatible    = true
 
-
 styles[] {
-   .comment_hash  : style color = "#808080" textmate_scope = "comment.line.number-sign";
-   .comment_slash : style color = "#808080" textmate_scope = "comment.line.double-slash";
-   .comment_block : style color = "#808080" textmate_scope = "comment.block";
-   .keyword  : style color = "#FF6666"     textmate_scope = "keyword";
-   .operator : style color = "#FF6666"     textmate_scope = "keyword.operator";
-   .type     : style color = "#33FFFF"     textmate_scope = "storage.type";
-   .desc     : style color = "white"       textmate_scope = "support.function";
-   .quoted   : style color = "orange"      textmate_scope = "string.quoted.single";
-   .numeric  : style color = "#FF66FF"     textmate_scope = "constant.numeric";
-   .deprecated : style color = "#FF6666"   textmate_scope = "invalid.deprecated";
+   .comment_hash : style {
+      color = #808080
+      textmate_scope = comment.line.number-sign
+   }
+   .comment_slash : style {
+      color = #808080
+      textmate_scope = comment.line.double-slash
+   }
+   .comment_block : style {
+      color = #808080
+      textmate_scope = comment.block
+   }
+   .keyword : style {
+      color = #FF6666
+      textmate_scope = keyword
+   }
+   .operator : style {
+      color = #FF6666
+      textmate_scope = keyword.operator
+   }
+   .type : style {
+      color = #33FFFF
+      textmate_scope = storage.type
+   }
+   .desc : style {
+      color = white
+      textmate_scope = support.function
+   }
+   .quoted : style {
+      color = orange
+      textmate_scope = string.quoted.single
+   }
+   .double_quoted : style {
+      color = orange
+      textmate_scope = string.quoted.double
+   }
+   .numeric : style {
+      color = #FF66FF
+      textmate_scope = constant.numeric
+   }
+   .deprecated : style {
+      color = #FF6666
+      textmate_scope = invalid.deprecated
+   }
+   .punctuation : style {
+      color = white
+      textmate_scope = punctuation
+   }
+   .identifier : style {
+      color = white
+      textmate_scope = variable.other
+   }
 }
-contexts[] {
 
+contexts[] {
    main : context {
       : include "multi_line_comment" ;
-      : include "floatingPoints" ;
-      : include "integers" ;
-      # DECLARE ... FILE - forma przestarzala (#346). FILE stoi tu zaraz po interwale
-      # deklaracji, czego w SELECT ... FILE nie ma. Wiersz kontynuacji `\` nie jest rozpoznawany.
-      : pattern {
-         regex \= (,\s*[0-9][0-9.]*(?:\s*/\s*[0-9]+)?\s+)((?:FILE|file)\b)
-         styles [] = .numeric, .deprecated;
-      }
-      : pattern {
-         regex \= (\b(SELECT|select|STREAM|stream|FROM|from|DECLARE|declare|RETENTION|retention|FILE|file|BINFILE|binfile|TEXTFILE|textfile|DEVICE|device|STORAGE|storage|ROTATION|rotation|SUBSTRAT|substrat|VOLATILE|volatile|PERSISTENT|persistent|RULE|rule|DISPOSABLE|disposable|ONESHOT|oneshot|HOLD|hold|NOCACHE|nocache|CACHE|cache|ON|on|WHEN|when|DO|do|DUMP|dump|SYSTEM|system|TO|to|AND|and|OR|or|NOT|not)\b)
-         styles [] = .keyword;
-      }
-      : pattern {
-         regex \= (\b(INTEGER|Integer|BYTE|Byte|CHAR|Char|UINT|Uint|STRING|String|FLOAT|Float|DOUBLE|Double|MEMORY|memory|DEFAULT|default|DIRECT|direct|POSIX|posix|POSIXSHD|posixshd|GENERIC|generic|TEXTSOURCE|textsource)\b)
-         styles [] = .type;
-      }
-      : pattern {
-         regex \= (\b(MIN|min|MAX|max|AVG|avg|SUMC|sumc)\b)
-         styles [] = .desc;
-      }
-      : pattern {
-         regex \= (\b(?i:sqrt|ceil|floor|abs|round|trunc|sin|cos|exp|tan|log2|log|isnull|null2zero|iszero|isnonzero|length|to_integer|to_float|to_double|to_string|int|float|real|str)\b(?=\s*\())
-         styles [] = .desc;
+      : inline_push {
+         regex \= (\{)
+         styles [] = .punctuation;
+         : include "descriptor" ;
+         : pop {
+            regex \= (\})
+            styles [] = .punctuation;
+         }
       }
       : pattern {
          regex \= (^\s*#.*)
          styles [] = .comment_hash;
       }
+      : include "line_comment" ;
+      : include "single_quoted" ;
       : pattern {
-         regex \= (//.*)
-         styles [] = .comment_slash;
+         regex \= (,\s*)((?:[0-9]+\s*/\s*[0-9]+|[0-9]+\.[0-9]*|\.[0-9]+|[0-9]+)\s+)((?:FILE|file)(?![A-Za-z_$0-9]))
+         styles [] = .punctuation, .numeric, .deprecated;
+      }
+      : include "floatingPoints" ;
+      : include "integers" ;
+      : pattern {
+         regex \= (\b(?:SELECT|select|STREAM|stream|FROM|from|DECLARE|declare|RETENTION|retention|FILE|file|BINFILE|binfile|TEXTFILE|textfile|DEVICE|device|STORAGE|storage|ROTATION|rotation|SUBSTRAT|substrat|VOLATILE|volatile|PERSISTENT|persistent|RULE|rule|DISPOSABLE|disposable|ONESHOT|oneshot|HOLD|hold|TIMEOUT|timeout|DEFAULT|default|ON|on|WHEN|when|DO|do|DUMP|dump|SYSTEM|system|TO|to|AND|and|OR|or|NOT|not)(?![A-Za-z_$0-9]))
+         styles [] = .keyword;
       }
       : pattern {
-         regex \= ([#&%/>+@^$:])
+         regex \= (\b(?:INTEGER|Integer|BYTE|Byte|CHAR|Char|UINT|Uint|STRING|String|FLOAT|Float|DOUBLE|Double|MEMORY|memory|DIRECT|direct|POSIX|posix|POSIXSHD|posixshd|GENERIC|generic)(?![A-Za-z_$0-9]))
+         styles [] = .type;
+      }
+      : pattern {
+         regex \= (\.\s*)((?:MIN|min|MAX|max|AVG|avg|SUMC|sumc)(?![A-Za-z_$0-9]))
+         styles [] = .punctuation, .deprecated;
+      }
+      : pattern {
+         regex \= (\b(?:MIN|min|MAX|max|AVG|avg|SUMC|sumc)(?![A-Za-z_$0-9]))
+         styles [] = .desc;
+      }
+      : pattern {
+         regex \= (\b(?i:sqrt|ceil|floor|abs|round|trunc|sin|cos|exp|tan|log2|log|isnull|null2zero|iszero|isnonzero|length|to_integer|to_float|to_double|to_string|int|float|real|str)(?![A-Za-z_$0-9])(?=\s*\())
+         styles [] = .desc;
+      }
+      : pattern {
+         regex \= (::|!=|>=|<=|\|\||[#&%/>+@^$:=<!*~|_\-])
          styles [] = .operator;
       }
+      : pattern {
+         regex \= ([\[\](),.;]|\\$)
+         styles [] = .punctuation;
+      }
+      : include "identifier" ;
+   }
+
+   descriptor : context {
+      : include "multi_line_comment" ;
+      : pattern {
+         regex \= (# .*)
+         styles [] = .comment_hash;
+      }
+      : include "line_comment" ;
       : inline_push {
-         regex \= (\')
-         styles [] = .quoted;
-         default_style = .quoted
+         regex \= (")
+         styles [] = .double_quoted;
+         default_style = .double_quoted
          : pop {
-            regex  \= (\')
-            styles [] = .quoted;
+            regex \= (")
+            styles [] = .double_quoted;
+         }
+      }
+      : include "single_quoted" ;
+      : include "integers" ;
+      : pattern {
+         regex \= (\b(?:TYPE|REF|RETENTION|RETMEMORY)(?![A-Za-z_$0-9]))
+         styles [] = .keyword;
+      }
+      : pattern {
+         regex \= (\b(?:BYTE|STRING|UINT|INTEGER|FLOAT|DOUBLE|RATIONAL)(?![A-Za-z_$0-9]))
+         styles [] = .type;
+      }
+      : pattern {
+         regex \= (\b(?:DEFAULT|MEMORY|DIRECT|POSIX|POSIXSHD|GENERIC|BINFILE|DEVICE|TEXTSOURCE)(?![A-Za-z_$0-9]))
+         styles [] = .type;
+      }
+      : pattern {
+         regex \= ([\[\]])
+         styles [] = .punctuation;
+      }
+      : include "identifier" ;
+   }
+
+   multi_line_comment : context {
+      : inline_push {
+         regex \= (/\*)
+         styles [] = .comment_block;
+         : include "multi_line_comment" ;
+         : pattern {
+            regex \= ([^*/]+|\*(?!/)|/(?!\*))
+            styles [] = .comment_block;
+         }
+         : pop {
+            regex \= (\*/)
+            styles [] = .comment_block;
          }
       }
    }
 
-   multi_line_comment : context {
-      description        = multiline
+   line_comment : context {
+      : pattern {
+         regex \= (//.*)
+         styles [] = .comment_slash;
+      }
+   }
+
+   single_quoted : context {
       : inline_push {
-         regex          \= (/\*)
-         styles []       = .comment_block;
-         default_style   = .comment_block
+         regex \= (')
+         styles [] = .quoted;
+         : pattern {
+            regex \= ('')
+            styles [] = .quoted;
+         }
+         : pattern {
+            regex \= ([^']+)
+            styles [] = .quoted;
+         }
          : pop {
-            regex       \= (\*/)
-            styles []    = .comment_block;
+            regex \= ('(?!'))
+            styles [] = .quoted;
          }
       }
    }
 
    floatingPoints : context {
       : pattern {
-         regex          \= (\b[0-9][0-9]*)(\.)(\b[0-9][0-9]*)
-         styles []       = .numeric;
+         regex \= ((?:[0-9]+\.[0-9]*|\.[0-9]+)(?:E[+-]?[0-9]+)?|[0-9]+E[+-]?[0-9]+)(?![A-Za-z_$0-9])
+         styles [] = .numeric;
       }
    }
-   
+
    integers : context {
       : pattern {
-         regex          \= (\b[0-9][0-9]*)
-         styles []       = .numeric;
+         regex \= ([0-9]+)(?![A-Za-z_$0-9])
+         styles [] = .numeric;
       }
    }
+
+   identifier : context {
+      : pattern {
+         regex \= ([A-Za-z][A-Za-z_$0-9]*)
+         styles [] = .identifier;
+      }
+   }
+
 }

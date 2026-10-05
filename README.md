@@ -9,19 +9,23 @@ Rozszerzenie obsługuje pliki `.rql` oraz `.desc` i podświetla:
 | Kategoria | Przykłady |
 |---|---|
 | Słowa kluczowe | `SELECT`, `DECLARE`, `RULE`, `FROM`, `STREAM`, `WHEN`, `DO`, `DUMP` |
-| Rodzaje źródeł `DECLARE` | `BINFILE`, `TEXTFILE`, `DEVICE` |
-| Forma przestarzała | `FILE` w `DECLARE` zaraz po interwale (`..., 0.1 FILE 'x'`) - zakres `invalid.deprecated` |
+| Rodzaje źródeł `DECLARE` | `BINFILE`, `TEXTFILE`, `DEVICE`, opcja `TIMEOUT` |
+| Formy przestarzałe | `FILE` w `DECLARE` zaraz po interwale oraz agregatory przyrostkowe (`s.min`, `s.max`, `s.avg`, `s.sumc`) - zakres `invalid.deprecated` |
 | Dyrektywy kompilatora | `STORAGE`, `ROTATION`, `SUBSTRAT` |
-| Operatory logiczne | `AND`, `OR`, `NOT` |
-| Typy danych | `INTEGER`, `FLOAT`, `DOUBLE`, `STRING`, `BYTE`, `CHAR`, `UINT` |
+| Operatory | `AND`, `OR`, `NOT`, `=`, `!=`, `<`, `<=`, `>`, `>=`, `+`, `-`, `*`, `/`, `~`, `^`, `#`, `&`, `%`, `@`, `$`, `:` |
+| Typy danych | `INTEGER`, `FLOAT`, `DOUBLE`, `STRING`, `BYTE`, `CHAR`, `UINT`; dodatkowo `RATIONAL` w deskryptorach |
+| Polecenia deskryptorów | `TYPE`, `REF`, `RETENTION`, `RETMEMORY` wewnątrz `{ ... }` |
 | Profile pamięci | `MEMORY`, `DIRECT`, `POSIX`, `POSIXSHD`, `GENERIC` (oraz typ `TEXTSOURCE` w plikach `.desc`) |
 | Agregatory | `MIN`, `MAX`, `AVG`, `SUMC` |
-| Funkcje wbudowane | `Sqrt`, `Ceil`, `Abs`, `ToNumber`, `FloatCast`, `to_integer`, `isnull`, ... |
+| Funkcje wbudowane | `Sqrt`, `Ceil`, `Floor`, `Abs`, `round`, `trunc`, `sin`, `cos`, `exp`, `tan`, `log`, `log2`, `isnull`, `null2zero`, `IsZero`, `IsNonZero`, `Length`, `to_integer`, `to_float`, `to_double`, `to_string`; skróty `int`, `float`, `real`, `str` |
 
 Dodatkowo obsługiwane są:
 
-- komentarze liniowe `//` i hashowe `# ` (wymagana spacja po `#`)
-- komentarze blokowe `/* ... */`
+- komentarze liniowe `//`; w RQL komentarzem `#` jest cały wiersz, którego pierwszym niebiałym znakiem jest `#`, a w deskryptorach `# ` może zaczynać komentarz także po poleceniu
+- zagnieżdżone komentarze blokowe `/* ... */`
+- napisy RQL `'...'` z podwojonym apostrofem `''` oraz ścieżki deskryptorów `REF "..."`
+- liczby całkowite i tokeny zmiennoprzecinkowe, w tym `.5`, `5.` i zapis z wykładnikiem `E`; podświetlanie tokenu nie oznacza, że parser dopuszcza go w każdym miejscu
+- identyfikatory zawierające `$` bez kolorowania ich fragmentów jako słów kluczowych lub liczb
 - automatyczne zamykanie nawiasów `()`, `[]`, `{}`
 - automatyczne zamykanie cudzysłowów `'...'`
 
@@ -98,18 +102,40 @@ Jeśli kolorowanie nie działa, upewnij się że wybrany motyw kolorystyczny obs
 
 ## Aktualizacja gramatyki
 
-Gramatyka jest utrzymywana w pliku `syntaxes/rql.iro` (format [Iro](https://eeyo.io/iro/)) i synchronizowana z `RQL.g4` projektu RetractorDB. Wygenerowany plik `syntaxes/rql.tmLanaguage` jest gotowy do użycia bez dodatkowych kroków.
+Gramatyka jest utrzymywana w pliku `syntaxes/rql.iro` (format [Iro](https://eeyo.io/iro/)) i synchronizowana z `RQL.g4` oraz `DESC.g4` projektu RetractorDB. Nazwy funkcji skalarnych pochodzą z `src/include/rqlFunctions.hpp`. Wygenerowany plik `syntaxes/rql.tmLanaguage` jest gotowy do użycia bez dodatkowych kroków. Deskryptory mają osobny kontekst podświetlania wewnątrz `{ ... }`.
 
 Aby przeregenerować `tmLanguage` po zmianie `rql.iro`:
 
-1. Otwórz [https://eeyo.io/iro/](https://eeyo.io/iro/) i wklej zawartość `syntaxes/rql.iro`.
-2. W sekcji eksportu wybierz **TextMate** i skopiuj wynik do `syntaxes/rql.tmLanaguage`.
+```bash
+./build.sh install-iro   # instalacja gotowego wydania CLI
+./build.sh compile-iro   # eksport syntaxes/rql.iro do syntaxes/rql.tmLanaguage
+```
+
+`compile-iro` szuka polecenia `iro` w `PATH`, a następnie w katalogu instalatora (`IRO_INSTALL_DIR`, domyślnie `~/.local/bin`). Sprawdza wynik kompilacji przed zastąpieniem używanej gramatyki. W razie braku CLI wskazuje polecenie instalacji.
+
+Alternatywnie można wkleić plik do [Iro online](https://eeyo.io/iro/), wybrać eksport **TextMate** i zapisać wynik jako `syntaxes/rql.tmLanaguage`.
 
 ## Znane problemy
 
 - Nazwa pliku gramatyki (`rql.tmLanaguage`) zawiera literówkę — zachowana dla zgodności wstecznej z `package.json`.
+- Oznaczanie przestarzałego `DECLARE ... FILE` wymaga interwału i `FILE` w tym samym fizycznym wierszu.
 
 ## Historia zmian
+
+### 0.0.7
+
+- Dodano opcję `TIMEOUT` oraz osobny kontekst deskryptorów z `TYPE`, `REF`, `RETMEMORY` i `RATIONAL`.
+- Poprawiono podświetlanie ścieżek `REF "..."`, podwojonych apostrofów i zagnieżdżonych komentarzy blokowych.
+- Uzupełniono operatory i liczby, w tym `.5`, `5.` oraz tokeny z wykładnikiem `E`.
+- Poprawiono komentarze `# ` w deskryptorach i identyfikatory zawierające `$`.
+- Agregatory przyrostkowe oznaczono jako przestarzałe; usunięto `CACHE` i `NOCACHE` z listy słów kluczowych.
+- Uaktualniono opis funkcji skalarnych i składni komentarzy.
+
+### 0.0.6
+
+- Dodano rodzaje źródeł `DECLARE`: `BINFILE`, `TEXTFILE` i `DEVICE` (RetractorDB #346).
+- Oznaczono `FILE` w `DECLARE` zaraz po interwale zakresem `invalid.deprecated`; `FILE` w `SELECT` zachowuje dotychczasowe podświetlanie.
+- Usunięto `DEVICE` i `TEXTSOURCE` z profili `STORAGE`; `TEXTSOURCE` pozostaje typem w plikach `.desc`.
 
 ### 0.0.2
 
