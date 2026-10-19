@@ -82,6 +82,14 @@ styles[] {
       color = white
       textmate_scope = variable.other
    }
+   .constant : style {
+      color = #66CCFF
+      textmate_scope = variable.other.constant
+   }
+   .illegal : style {
+      color = #FF0000
+      textmate_scope = invalid.illegal
+   }
 }
 
 contexts[] {
@@ -109,7 +117,19 @@ contexts[] {
       : include "floatingPoints" ;
       : include "integers" ;
       : pattern {
-         regex \= (\b(?:SELECT|select|STREAM|stream|FROM|from|DECLARE|declare|RETENTION|retention|FILE|file|BINFILE|binfile|TEXTFILE|textfile|DEVICE|device|STORAGE|storage|ROTATION|rotation|SUBSTRAT|substrat|VOLATILE|volatile|PERSISTENT|persistent|RULE|rule|DISPOSABLE|disposable|ONESHOT|oneshot|HOLD|hold|TIMEOUT|timeout|DEFAULT|default|ON|on|WHEN|when|DO|do|DUMP|dump|SYSTEM|system|TO|to)(?![A-Za-z_$0-9]))
+         regex \= (\b(?:LET|let))(\s+)([A-Za-z][A-Za-z_0-9]*)(?![A-Za-z_$0-9])
+         styles [] = .keyword, .punctuation, .constant;
+      }
+      : pattern {
+         regex \= (\?[A-Za-z][A-Za-z_0-9]*)(?![A-Za-z_$0-9])
+         styles [] = .constant;
+      }
+      : pattern {
+         regex \= (\?[A-Za-z_$0-9]*)
+         styles [] = .illegal;
+      }
+      : pattern {
+         regex \= (\b(?:LET|let|SELECT|select|STREAM|stream|FROM|from|DECLARE|declare|RETENTION|retention|FILE|file|BINFILE|binfile|TEXTFILE|textfile|DEVICE|device|STORAGE|storage|ROTATION|rotation|SUBSTRAT|substrat|VOLATILE|volatile|PERSISTENT|persistent|RULE|rule|DISPOSABLE|disposable|ONESHOT|oneshot|HOLD|hold|TIMEOUT|timeout|DEFAULT|default|ON|on|WHEN|when|DO|do|DUMP|dump|SYSTEM|system|TO|to)(?![A-Za-z_$0-9]))
          styles [] = .keyword;
       }
       : pattern {

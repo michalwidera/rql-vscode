@@ -105,7 +105,41 @@
         </dict>
         <dict>
           <key>match</key>
-          <string>(\b(?:SELECT|select|STREAM|stream|FROM|from|DECLARE|declare|RETENTION|retention|FILE|file|BINFILE|binfile|TEXTFILE|textfile|DEVICE|device|STORAGE|storage|ROTATION|rotation|SUBSTRAT|substrat|VOLATILE|volatile|PERSISTENT|persistent|RULE|rule|DISPOSABLE|disposable|ONESHOT|oneshot|HOLD|hold|TIMEOUT|timeout|DEFAULT|default|ON|on|WHEN|when|DO|do|DUMP|dump|SYSTEM|system|TO|to)(?![A-Za-z_$0-9]))</string>
+          <string>(\b(?:LET|let))(\s+)([A-Za-z][A-Za-z_0-9]*)(?![A-Za-z_$0-9])</string>
+          <key>captures</key>
+          <dict>
+            <key>1</key>
+            <dict>
+              <key>name</key>
+              <string>keyword.rql</string>
+            </dict>
+            <key>2</key>
+            <dict>
+              <key>name</key>
+              <string>punctuation.rql</string>
+            </dict>
+            <key>3</key>
+            <dict>
+              <key>name</key>
+              <string>variable.other.constant.rql</string>
+            </dict>
+          </dict>
+        </dict>
+        <dict>
+          <key>match</key>
+          <string>(\?[A-Za-z][A-Za-z_0-9]*)(?![A-Za-z_$0-9])</string>
+          <key>name</key>
+          <string>variable.other.constant.rql</string>
+        </dict>
+        <dict>
+          <key>match</key>
+          <string>(\?[A-Za-z_$0-9]*)</string>
+          <key>name</key>
+          <string>invalid.illegal.rql</string>
+        </dict>
+        <dict>
+          <key>match</key>
+          <string>(\b(?:LET|let|SELECT|select|STREAM|stream|FROM|from|DECLARE|declare|RETENTION|retention|FILE|file|BINFILE|binfile|TEXTFILE|textfile|DEVICE|device|STORAGE|storage|ROTATION|rotation|SUBSTRAT|substrat|VOLATILE|volatile|PERSISTENT|persistent|RULE|rule|DISPOSABLE|disposable|ONESHOT|oneshot|HOLD|hold|TIMEOUT|timeout|DEFAULT|default|ON|on|WHEN|when|DO|do|DUMP|dump|SYSTEM|system|TO|to)(?![A-Za-z_$0-9]))</string>
           <key>name</key>
           <string>keyword.rql</string>
         </dict>

@@ -12,6 +12,8 @@ Rozszerzenie obsługuje pliki `.rql` oraz `.desc` i podświetla:
 | Rodzaje źródeł `DECLARE` | `BINFILE`, `TEXTFILE`, `DEVICE`, opcja `TIMEOUT` |
 | Formy przestarzałe | `FILE` w `DECLARE` zaraz po interwale oraz agregatory przyrostkowe (`s.min`, `s.max`, `s.avg`, `s.sumc`) - zakres `invalid.deprecated` |
 | Dyrektywy kompilatora | `STORAGE`, `ROTATION`, `SUBSTRAT` |
+| Stałe nazwane | `LET` jako słowo kluczowe; nazwa w deklaracji `LET NAZWA = wartość` i odwołanie `?NAZWA` - zakres `variable.other.constant.rql` |
+| Błędne odwołania do stałej | samotne `?`, `? NAZWA` ze spacją, `?A$B`, `?1` - zakres `invalid.illegal.rql` |
 | Operatory logiczne | `AND`, `OR`, `NOT` - osobny zakres `keyword.operator.logical.rql` |
 | Pozostałe operatory | `=`, `!=`, `<`, `<=`, `>`, `>=`, `+`, `-`, `*`, `/`, `~`, `^`, `#`, `&`, `%`, `@`, `$`, `:` |
 | Typy danych | `INTEGER`, `FLOAT`, `DOUBLE`, `STRING`, `BYTE`, `CHAR`, `UINT`; dodatkowo `RATIONAL` w deskryptorach |
@@ -27,6 +29,7 @@ Dodatkowo obsługiwane są:
 - napisy RQL `'...'` z podwojonym apostrofem `''` oraz ścieżki deskryptorów `REF "..."`
 - liczby całkowite i tokeny zmiennoprzecinkowe, w tym `.5`, `5.` i zapis z wykładnikiem `E`; podświetlanie tokenu nie oznacza, że parser dopuszcza go w każdym miejscu
 - identyfikatory zawierające `$` bez kolorowania ich fragmentów jako słów kluczowych lub liczb
+- odwołania do stałych w każdym miejscu, np. `src@(?STEP, ?WIDTH)`, `src[?LAST-$]`, `-?OFFSET`; `?` wewnątrz napisu lub komentarza pozostaje częścią napisu lub komentarza
 - automatyczne zamykanie nawiasów `()`, `[]`, `{}`
 - automatyczne zamykanie cudzysłowów `'...'`
 
@@ -103,7 +106,7 @@ Jeśli kolorowanie nie działa, upewnij się że wybrany motyw kolorystyczny obs
 
 ## Kolory w jasnym i ciemnym motywie
 
-Od wersji **0.0.8** operatory logiczne `AND`, `OR` i `NOT` mają osobny zakres TextMate. Można dzięki temu nadać im kolor różny od poleceń i typów danych. Napisy w apostrofach oraz ścieżki deskryptorów w cudzysłowach także mają własne zakresy.
+Od wersji **0.0.8** operatory logiczne `AND`, `OR` i `NOT` mają osobny zakres TextMate. Można dzięki temu nadać im kolor różny od poleceń i typów danych. Napisy w apostrofach oraz ścieżki deskryptorów w cudzysłowach także mają własne zakresy. Od wersji **0.0.9** osobny zakres mają również stałe nazwane `LET` i `?NAZWA`.
 
 Gramatyka klasyfikuje tokeny, a konkretne kolory wybiera motyw lub ustawienia VS Code. Wartości `color` w `rql.iro` nie ustawiają kolorów w VS Code. Poniższa paleta wymaga dodania konfiguracji do `settings.json`; instalacja rozszerzenia sama jej nie włącza.
 
@@ -113,8 +116,9 @@ Gramatyka klasyfikuje tokeny, a konkretne kolory wybiera motyw lub ustawienia VS
 | Typy, np. `INTEGER`, `BYTE`, `STRING` | `storage.type.rql` | `#006B75` - ciemny turkus | `#4EC9B0` - jasny turkus |
 | Operatory logiczne `AND`, `OR`, `NOT` | `keyword.operator.logical.rql` | `#795E00` - ochra | `#DCDCAA` - jasnożółty |
 | Napisy `'...'` oraz ścieżki `REF "..."` | `string.quoted.single.rql`, `string.quoted.double.rql` | `#7A3E9D` - ciemnofioletowy | `#CE9FF2` - jasnofioletowy |
+| Stałe nazwane: nazwa po `LET` i `?NAZWA` | `variable.other.constant.rql` | `#0451A5` - ciemnoniebieski | `#4FC1FF` - jasnoniebieski |
 
-Paletę sprawdzono dla `Light 2026`, `Dark 2026`, `Light Modern`, `Dark Modern`, `Light+` i `Dark+`. Kontrast wszystkich czterech kategorii względem tła edytora tych motywów przekracza 6:1. Ciemny turkus w jasnym motywie zastępuje jaskrawy `#33FFFF`, który jest słabo widoczny na białym tle.
+Paletę sprawdzono dla `Light 2026`, `Dark 2026`, `Light Modern`, `Dark Modern`, `Light+` i `Dark+`. Kontrast wszystkich pięciu kategorii względem tła edytora tych motywów przekracza 6:1. Ciemny turkus w jasnym motywie zastępuje jaskrawy `#33FFFF`, który jest słabo widoczny na białym tle.
 
 Otwórz **Preferences: Open User Settings (JSON)** i dodaj poniższą konfigurację. W WSL można użyć **Preferences: Open Remote Settings (JSON)**. Jeśli `editor.tokenColorCustomizations` już istnieje, połącz wpisy z obecną konfiguracją.
 
@@ -138,6 +142,10 @@ Otwórz **Preferences: Open User Settings (JSON)** i dodaj poniższą konfigurac
         {
           "scope": ["string.quoted.single.rql", "string.quoted.double.rql"],
           "settings": { "foreground": "#7A3E9D" }
+        },
+        {
+          "scope": "variable.other.constant.rql",
+          "settings": { "foreground": "#0451A5" }
         }
       ]
     },
@@ -158,6 +166,10 @@ Otwórz **Preferences: Open User Settings (JSON)** i dodaj poniższą konfigurac
         {
           "scope": ["string.quoted.single.rql", "string.quoted.double.rql"],
           "settings": { "foreground": "#CE9FF2" }
+        },
+        {
+          "scope": "variable.other.constant.rql",
+          "settings": { "foreground": "#4FC1FF" }
         }
       ]
     }
@@ -166,6 +178,8 @@ Otwórz **Preferences: Open User Settings (JSON)** i dodaj poniższą konfigurac
 ```
 
 Reguły wybierają paletę według nazwy motywu: `Light` lub `light` dla jasnej i `Dark` lub `dark` dla ciemnej. Dodatkowo wymieniono kilka ciemnych motywów bez tych słów w nazwie. Motywy niepasujące do żadnego wpisu zachowują własną paletę; aby zastosować powyższe kolory, dopisz ich nazwę w odpowiedniej grupie. Kolory zmieniają się wraz z wyborem pasującego motywu, bez ponownego budowania rozszerzenia. Szczegóły opisuje [dokumentacja konfiguracji motywów VS Code](https://code.visualstudio.com/docs/configure/themes#_editor-syntax-highlighting).
+
+Zakres `invalid.illegal.rql` dla błędnych odwołań `?` koloruje sam motyw - większość motywów wyróżnia go bez dodatkowej konfiguracji.
 
 Kolorowanie napisów, np. `'dane.txt'`, dotyczy literałów tekstowych. Nazwy pól zadeklarowanych jako `STRING` nadal mają zakres `variable.other.rql`, tak jak pozostałe identyfikatory. Rozróżnianie ich według typu wymagałoby dodania analizy semantycznej do rozszerzenia.
 
@@ -188,8 +202,15 @@ Alternatywnie można wkleić plik do [Iro online](https://eeyo.io/iro/), wybrać
 
 - Nazwa pliku gramatyki (`rql.tmLanaguage`) zawiera literówkę — zachowana dla zgodności wstecznej z `package.json`.
 - Oznaczanie przestarzałego `DECLARE ... FILE` wymaga interwału i `FILE` w tym samym fizycznym wierszu.
+- Nazwa stałej po `LET` jest oznaczana tylko wtedy, gdy stoi w tym samym fizycznym wierszu co `LET`. Rozszerzenie nie sprawdza, czy stała `?NAZWA` została zadeklarowana - robi to dopiero parser RetractorDB.
 
 ## Historia zmian
+
+### 0.0.9
+
+- Dodano słowo kluczowe `LET`/`let` oraz zakres `variable.other.constant.rql` dla nazwy w deklaracji `LET NAZWA = wartość` i odwołań `?NAZWA` (RetractorDB #440).
+- Błędne odwołania (`?` samotne, ze spacją, z `$` w nazwie lub z cyfrą na początku) oznaczono zakresem `invalid.illegal.rql`.
+- Dodano kolory stałych nazwanych do palety jasnego i ciemnego motywu.
 
 ### 0.0.8
 

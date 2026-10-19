@@ -6,6 +6,11 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased]
 
+## [0.0.9]
+
+- Dodano slowo kluczowe `LET`/`let` i stale nazwane RetractorDB #440: nazwa w deklaracji `LET NAZWA = wartosc` oraz odwolanie `?NAZWA` maja zakres `variable.other.constant.rql`.
+- Samotne `?`, `?` ze spacja przed nazwa oraz `?` z nazwa niedozwolona w RQL (z `$` albo zaczynajaca sie od cyfry) maja zakres `invalid.illegal.rql`; `?` w napisie i komentarzu pozostaje napisem lub komentarzem.
+
 ## [0.0.8]
 
 - Wydzielono `AND`, `OR` i `NOT` do zakresu `keyword.operator.logical.rql`, aby umozliwic osobny kolor operatorow logicznych.
