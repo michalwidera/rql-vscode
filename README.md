@@ -13,7 +13,8 @@ Rozszerzenie obsługuje pliki `.rql` oraz `.desc` i podświetla:
 | Formy przestarzałe | `FILE` w `DECLARE` zaraz po interwale oraz agregatory przyrostkowe (`s.min`, `s.max`, `s.avg`, `s.sumc`) - zakres `invalid.deprecated` |
 | Dyrektywy kompilatora | `STORAGE`, `ROTATION`, `SUBSTRAT` |
 | Stałe nazwane | `LET` jako słowo kluczowe; nazwa w deklaracji `LET NAZWA = wartość` i odwołanie `?NAZWA` - zakres `variable.other.constant.rql` |
-| Błędne odwołania do stałej | samotne `?`, `? NAZWA` ze spacją, `?A$B`, `?1` - zakres `invalid.illegal.rql` |
+| Zmienne planu | `VAR` i `SET` jako słowa kluczowe; nazwa w deklaracji `VAR NAZWA = wartość` - zakres `variable.other.readwrite.rql`; odwołanie `?NAZWA`, także po `DO SET`, ma ten sam zakres co odwołanie do stałej |
+| Błędne odwołania do stałej lub zmiennej | samotne `?`, `? NAZWA` ze spacją, `?A$B`, `?1` - zakres `invalid.illegal.rql` |
 | Operatory logiczne | `AND`, `OR`, `NOT` - osobny zakres `keyword.operator.logical.rql` |
 | Pozostałe operatory | `=`, `!=`, `<`, `<=`, `>`, `>=`, `+`, `-`, `*`, `/`, `~`, `^`, `#`, `&`, `%`, `@`, `$`, `:` |
 | Typy danych | `INTEGER`, `FLOAT`, `DOUBLE`, `STRING`, `BYTE`, `CHAR`, `UINT`; dodatkowo `RATIONAL` w deskryptorach |
@@ -29,7 +30,7 @@ Dodatkowo obsługiwane są:
 - napisy RQL `'...'` z podwojonym apostrofem `''` oraz ścieżki deskryptorów `REF "..."`
 - liczby całkowite i tokeny zmiennoprzecinkowe, w tym `.5`, `5.` i zapis z wykładnikiem `E`; podświetlanie tokenu nie oznacza, że parser dopuszcza go w każdym miejscu
 - identyfikatory zawierające `$` bez kolorowania ich fragmentów jako słów kluczowych lub liczb
-- odwołania do stałych w każdym miejscu, np. `src@(?STEP, ?WIDTH)`, `src[?LAST-$]`, `-?OFFSET`; `?` wewnątrz napisu lub komentarza pozostaje częścią napisu lub komentarza
+- odwołania do stałych i zmiennych w każdym miejscu, np. `src@(?STEP, ?WIDTH)`, `src[?LAST-$]`, `-?OFFSET`; `?` wewnątrz napisu lub komentarza pozostaje częścią napisu lub komentarza
 - automatyczne zamykanie nawiasów `()`, `[]`, `{}`
 - automatyczne zamykanie cudzysłowów `'...'`
 
@@ -106,7 +107,7 @@ Jeśli kolorowanie nie działa, upewnij się że wybrany motyw kolorystyczny obs
 
 ## Kolory w jasnym i ciemnym motywie
 
-Od wersji **0.0.8** operatory logiczne `AND`, `OR` i `NOT` mają osobny zakres TextMate. Można dzięki temu nadać im kolor różny od poleceń i typów danych. Napisy w apostrofach oraz ścieżki deskryptorów w cudzysłowach także mają własne zakresy. Od wersji **0.0.9** osobny zakres mają również stałe nazwane `LET` i `?NAZWA`.
+Od wersji **0.0.8** operatory logiczne `AND`, `OR` i `NOT` mają osobny zakres TextMate. Można dzięki temu nadać im kolor różny od poleceń i typów danych. Napisy w apostrofach oraz ścieżki deskryptorów w cudzysłowach także mają własne zakresy. Od wersji **0.0.9** osobny zakres mają również stałe nazwane `LET` i `?NAZWA`, a od wersji **0.0.10** nazwa w deklaracji zmiennej `VAR`.
 
 Gramatyka klasyfikuje tokeny, a konkretne kolory wybiera motyw lub ustawienia VS Code. Wartości `color` w `rql.iro` nie ustawiają kolorów w VS Code. Poniższa paleta wymaga dodania konfiguracji do `settings.json`; instalacja rozszerzenia sama jej nie włącza.
 
@@ -117,8 +118,9 @@ Gramatyka klasyfikuje tokeny, a konkretne kolory wybiera motyw lub ustawienia VS
 | Operatory logiczne `AND`, `OR`, `NOT` | `keyword.operator.logical.rql` | `#795E00` - ochra | `#DCDCAA` - jasnożółty |
 | Napisy `'...'` oraz ścieżki `REF "..."` | `string.quoted.single.rql`, `string.quoted.double.rql` | `#7A3E9D` - ciemnofioletowy | `#CE9FF2` - jasnofioletowy |
 | Stałe nazwane: nazwa po `LET` i `?NAZWA` | `variable.other.constant.rql` | `#0451A5` - ciemnoniebieski | `#4FC1FF` - jasnoniebieski |
+| Zmienne planu: nazwa po `VAR` | `variable.other.readwrite.rql` | `#A0007A` - ciemnoróżowy | `#FF8AD8` - jasnoróżowy |
 
-Paletę sprawdzono dla `Light 2026`, `Dark 2026`, `Light Modern`, `Dark Modern`, `Light+` i `Dark+`. Kontrast wszystkich pięciu kategorii względem tła edytora tych motywów przekracza 6:1. Ciemny turkus w jasnym motywie zastępuje jaskrawy `#33FFFF`, który jest słabo widoczny na białym tle.
+Paletę sprawdzono dla `Light 2026`, `Dark 2026`, `Light Modern`, `Dark Modern`, `Light+` i `Dark+`. Kontrast wszystkich sześciu kategorii względem tła edytora tych motywów przekracza 6:1. Ciemny turkus w jasnym motywie zastępuje jaskrawy `#33FFFF`, który jest słabo widoczny na białym tle.
 
 Otwórz **Preferences: Open User Settings (JSON)** i dodaj poniższą konfigurację. W WSL można użyć **Preferences: Open Remote Settings (JSON)**. Jeśli `editor.tokenColorCustomizations` już istnieje, połącz wpisy z obecną konfiguracją.
 
@@ -146,6 +148,10 @@ Otwórz **Preferences: Open User Settings (JSON)** i dodaj poniższą konfigurac
         {
           "scope": "variable.other.constant.rql",
           "settings": { "foreground": "#0451A5" }
+        },
+        {
+          "scope": "variable.other.readwrite.rql",
+          "settings": { "foreground": "#A0007A" }
         }
       ]
     },
@@ -170,6 +176,10 @@ Otwórz **Preferences: Open User Settings (JSON)** i dodaj poniższą konfigurac
         {
           "scope": "variable.other.constant.rql",
           "settings": { "foreground": "#4FC1FF" }
+        },
+        {
+          "scope": "variable.other.readwrite.rql",
+          "settings": { "foreground": "#FF8AD8" }
         }
       ]
     }
@@ -203,8 +213,15 @@ Alternatywnie można wkleić plik do [Iro online](https://eeyo.io/iro/), wybrać
 - Nazwa pliku gramatyki (`rql.tmLanaguage`) zawiera literówkę — zachowana dla zgodności wstecznej z `package.json`.
 - Oznaczanie przestarzałego `DECLARE ... FILE` wymaga interwału i `FILE` w tym samym fizycznym wierszu.
 - Nazwa stałej po `LET` jest oznaczana tylko wtedy, gdy stoi w tym samym fizycznym wierszu co `LET`. Rozszerzenie nie sprawdza, czy stała `?NAZWA` została zadeklarowana - robi to dopiero parser RetractorDB.
+- Nazwa zmiennej po `VAR` jest oznaczana tylko wtedy, gdy stoi w tym samym fizycznym wierszu co `VAR`. Odwołanie `?NAZWA` ma jeden zakres dla stałych `LET` i zmiennych `VAR`: gramatyka TextMate nie zna deklaracji, więc oba rodzaje odróżnia tylko zakres nazwy w deklaracji.
 
 ## Historia zmian
+
+### 0.0.10
+
+- Dodano słowa kluczowe `VAR`/`var` i `SET`/`set` oraz zakres `variable.other.readwrite.rql` dla nazwy w deklaracji `VAR NAZWA = wartość` (RetractorDB #531).
+- Odwołanie `?NAZWA` pozostaje wspólne dla stałych i zmiennych (`variable.other.constant.rql`).
+- Dodano kolory zmiennych planu do palety jasnego i ciemnego motywu.
 
 ### 0.0.9
 

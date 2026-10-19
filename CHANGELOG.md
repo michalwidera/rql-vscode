@@ -6,6 +6,11 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased]
 
+## [0.0.10]
+
+- Dodano slowa kluczowe `VAR`/`var` i `SET`/`set` dla zmiennych planu RetractorDB #531: nazwa w deklaracji `VAR NAZWA = wartosc` ma zakres `variable.other.readwrite.rql`, a `SET` w akcji `RULE ... DO SET ?NAZWA = wyrazenie` ma zakres `keyword.rql`.
+- Odwolanie `?NAZWA` ma jeden zakres `variable.other.constant.rql` dla stalych `LET` i zmiennych `VAR` (wspolny znacznik `?`, decyzja D5 w #531); stala od zmiennej odroznia tylko zakres nazwy w deklaracji.
+
 ## [0.0.9]
 
 - Dodano slowo kluczowe `LET`/`let` i stale nazwane RetractorDB #440: nazwa w deklaracji `LET NAZWA = wartosc` oraz odwolanie `?NAZWA` maja zakres `variable.other.constant.rql`.
