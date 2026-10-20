@@ -121,8 +121,24 @@ contexts[] {
       : include "floatingPoints" ;
       : include "integers" ;
       : pattern {
+         regex \= (\b(?:LET|let))(\s+)([A-Za-z][A-Za-z_0-9]*)(\s*)(:)(\s*)((?:INTEGER|Integer|UINT|Uint|FLOAT|Float|DOUBLE|Double|RATIONAL|Rational)(?![A-Za-z_$0-9]))
+         styles [] = .keyword, .punctuation, .constant, .punctuation, .operator, .punctuation, .type;
+      }
+      : pattern {
+         regex \= (\b(?:LET|let))(\s+)([A-Za-z][A-Za-z_0-9]*)(\s*)(:)(\s*)([A-Za-z_$0-9]+)
+         styles [] = .keyword, .punctuation, .constant, .punctuation, .operator, .punctuation, .illegal;
+      }
+      : pattern {
          regex \= (\b(?:LET|let))(\s+)([A-Za-z][A-Za-z_0-9]*)(?![A-Za-z_$0-9])
          styles [] = .keyword, .punctuation, .constant;
+      }
+      : pattern {
+         regex \= (\b(?:VAR|var))(\s+)([A-Za-z][A-Za-z_0-9]*)(\s*)(:)(\s*)((?:INTEGER|Integer|UINT|Uint|FLOAT|Float|DOUBLE|Double|RATIONAL|Rational)(?![A-Za-z_$0-9]))
+         styles [] = .keyword, .punctuation, .variable, .punctuation, .operator, .punctuation, .type;
+      }
+      : pattern {
+         regex \= (\b(?:VAR|var))(\s+)([A-Za-z][A-Za-z_0-9]*)(\s*)(:)(\s*)([A-Za-z_$0-9]+)
+         styles [] = .keyword, .punctuation, .variable, .punctuation, .operator, .punctuation, .illegal;
       }
       : pattern {
          regex \= (\b(?:VAR|var))(\s+)([A-Za-z][A-Za-z_0-9]*)(?![A-Za-z_$0-9])

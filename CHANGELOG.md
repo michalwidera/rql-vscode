@@ -7,6 +7,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 ## [Unreleased]
 
 - Typ `RATIONAL`/`Rational` podswietlany w planie RQL (zakres `storage.type.rql`), nie tylko w deskryptorach: jawny typ zmiennej `VAR NAZWA : TYP = literal` (RetractorDB #546).
+- Jawny typ w deklaracji `LET NAZWA : TYP = literal` i `VAR NAZWA : TYP = literal` (RetractorDB #546, #547): `:` ma zakres `keyword.operator.rql`, typ dozwolony w RQL (`INTEGER`, `UINT`, `FLOAT`, `DOUBLE`, `RATIONAL` w formie wielkimi literami lub z wielkiej litery) ma zakres `storage.type.rql`, a kazdy inny wyraz w tym miejscu (np. `STRING`, `BYTE`, `integer`) ma zakres `invalid.illegal.rql`.
 
 ## [0.0.10]
 
