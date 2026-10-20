@@ -6,6 +6,8 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased]
 
+- Typ `RATIONAL`/`Rational` podswietlany w planie RQL (zakres `storage.type.rql`), nie tylko w deskryptorach: jawny typ zmiennej `VAR NAZWA : TYP = literal` (RetractorDB #546).
+
 ## [0.0.10]
 
 - Dodano slowa kluczowe `VAR`/`var` i `SET`/`set` dla zmiennych planu RetractorDB #531: nazwa w deklaracji `VAR NAZWA = wartosc` ma zakres `variable.other.readwrite.rql`, a `SET` w akcji `RULE ... DO SET ?NAZWA = wyrazenie` ma zakres `keyword.rql`.

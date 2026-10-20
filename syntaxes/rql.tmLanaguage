@@ -173,7 +173,7 @@
         </dict>
         <dict>
           <key>match</key>
-          <string>(\b(?:INTEGER|Integer|BYTE|Byte|CHAR|Char|UINT|Uint|STRING|String|FLOAT|Float|DOUBLE|Double|MEMORY|memory|DIRECT|direct|POSIX|posix|POSIXSHD|posixshd|GENERIC|generic)(?![A-Za-z_$0-9]))</string>
+          <string>(\b(?:INTEGER|Integer|BYTE|Byte|CHAR|Char|UINT|Uint|STRING|String|FLOAT|Float|DOUBLE|Double|RATIONAL|Rational|MEMORY|memory|DIRECT|direct|POSIX|posix|POSIXSHD|posixshd|GENERIC|generic)(?![A-Za-z_$0-9]))</string>
           <key>name</key>
           <string>storage.type.rql</string>
         </dict>

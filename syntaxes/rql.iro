@@ -145,7 +145,7 @@ contexts[] {
          styles [] = .logical;
       }
       : pattern {
-         regex \= (\b(?:INTEGER|Integer|BYTE|Byte|CHAR|Char|UINT|Uint|STRING|String|FLOAT|Float|DOUBLE|Double|MEMORY|memory|DIRECT|direct|POSIX|posix|POSIXSHD|posixshd|GENERIC|generic)(?![A-Za-z_$0-9]))
+         regex \= (\b(?:INTEGER|Integer|BYTE|Byte|CHAR|Char|UINT|Uint|STRING|String|FLOAT|Float|DOUBLE|Double|RATIONAL|Rational|MEMORY|memory|DIRECT|direct|POSIX|posix|POSIXSHD|posixshd|GENERIC|generic)(?![A-Za-z_$0-9]))
          styles [] = .type;
       }
       : pattern {

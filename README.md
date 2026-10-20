@@ -17,7 +17,7 @@ Rozszerzenie obsługuje pliki `.rql` oraz `.desc` i podświetla:
 | Błędne odwołania do stałej lub zmiennej | samotne `?`, `? NAZWA` ze spacją, `?A$B`, `?1` - zakres `invalid.illegal.rql` |
 | Operatory logiczne | `AND`, `OR`, `NOT` - osobny zakres `keyword.operator.logical.rql` |
 | Pozostałe operatory | `=`, `!=`, `<`, `<=`, `>`, `>=`, `+`, `-`, `*`, `/`, `~`, `^`, `#`, `&`, `%`, `@`, `$`, `:` |
-| Typy danych | `INTEGER`, `FLOAT`, `DOUBLE`, `STRING`, `BYTE`, `CHAR`, `UINT`; dodatkowo `RATIONAL` w deskryptorach |
+| Typy danych | `INTEGER`, `FLOAT`, `DOUBLE`, `STRING`, `BYTE`, `CHAR`, `UINT`, `RATIONAL` (w planie tylko w adnotacji `VAR NAZWA : RATIONAL = ...`, w deskryptorach jako typ pola) |
 | Polecenia deskryptorów | `TYPE`, `REF`, `RETENTION`, `RETMEMORY` wewnątrz `{ ... }` |
 | Profile pamięci | `MEMORY`, `DIRECT`, `POSIX`, `POSIXSHD`, `GENERIC` (oraz typ `TEXTSOURCE` w plikach `.desc`) |
 | Agregatory | `MIN`, `MAX`, `AVG`, `SUMC` |
